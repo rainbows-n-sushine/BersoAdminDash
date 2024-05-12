@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './BusinessListing.css';
 import './UserManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import { faSearch, faBell, faUser, faSignOutAlt, faBuilding, faStore, faHotel, faUtensils, faCog, faHome, faGift, faBriefcase, faCar, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 
 // Sample data for businesses and categories
@@ -20,17 +21,39 @@ const businesses = [
 
 const BusinessListing = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
 
-  // Filter businesses based on selected category
+  const handleAddCategoryClick = () => {
+    setShowAddCategoryForm(true);
+  };
+
+  const handleAddCategoryFormSubmit = (e) => {
+    e.preventDefault();
+    // Add logic to handle form submission (e.g., sending the category name to the server)
+    console.log('New Category Name:', newCategoryName);
+    // Reset the form
+    setNewCategoryName('');
+    // Hide the form
+    setShowAddCategoryForm(false);
+  };
+
+  const handleAddCategoryFormClose = () => {
+    setShowAddCategoryForm(false);
+  };
+
+  const handleNewCategoryNameChange = (e) => {
+    setNewCategoryName(e.target.value);
+  };
+
   const filteredBusinesses = selectedCategory
     ? businesses.filter((business) => business.category === selectedCategory)
     : businesses;
 
-  // Get unique categories from businesses
   const categories = [...new Set(businesses.map((business) => business.category))];
 
   return (
@@ -50,6 +73,7 @@ const BusinessListing = () => {
         <div className="categories">
           <div className='user-management'>
             <h2>Categories</h2>
+           
           </div>
           <ul>
             <li
@@ -70,6 +94,9 @@ const BusinessListing = () => {
           </ul>
         </div>
         <div className="businesses">
+        <button className="add-category-button" onClick={handleAddCategoryClick}>
+              Add Categories
+            </button>
           <h2>Businesses</h2>
           {filteredBusinesses.length > 0 ? (
             <div className="business-grid">
@@ -80,13 +107,37 @@ const BusinessListing = () => {
                 </div>
               ))}
             </div>
+            
           ) : (
             <p>No businesses found.</p>
           )}
         </div>
-      </div>
+        {showAddCategoryForm && (
+        <div className="add-category-form-overlay">
+          <div className="add-category-form-container">
+            <h2>Add Category</h2>
+            <form className="add-category-form" onSubmit={handleAddCategoryFormSubmit}>
+              <label htmlFor="newCategoryName">Category Name:</label>
+              <input
+                type="text"
+                id="newCategoryName"
+                value={newCategoryName}
+                onChange={handleNewCategoryNameChange}
+                required
+              />
+              <div className="add-category-form-buttons">
+                <button type="submit">Add</button>
+                <button type="button" onClick={handleAddCategoryFormClose}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
     </div>
   );
-}
+};
 
 export default BusinessListing;
