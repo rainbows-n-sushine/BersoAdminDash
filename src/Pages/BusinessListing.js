@@ -20,6 +20,8 @@ const businesses = [
   { id: 10, name: 'Business J', category: 'Category 3', icon: faShoppingBag },
 ];
 
+
+
 const BusinessListing = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
@@ -39,7 +41,7 @@ async function getCategories(){
     console.log(categories_fetched)
     setCategoriesFetched(categories_fetched)
     
-  })
+  },[])
 }
 getCategories();
   })
