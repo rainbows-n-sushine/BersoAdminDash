@@ -4,7 +4,8 @@ import './UserManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { faSearch, faBell, faUser, faSignOutAlt, faBuilding, faStore, faHotel, faUtensils, faCog, faHome, faGift, faBriefcase, faCar, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
-
+import axios from 'axios';
+import api from '../util/Util';
 // Sample data for businesses and categories
 const businesses = [
   { id: 1, name: 'Business A', category: 'Category 1', icon: faBuilding },
@@ -23,6 +24,11 @@ const BusinessListing = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCategoryDescription, setNewCategoryDescription] = useState('');
+  const [category,setCategory]=useState({
+    name:"",
+    description:""
+  })
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -32,13 +38,33 @@ const BusinessListing = () => {
     setShowAddCategoryForm(true);
   };
 
-  const handleAddCategoryFormSubmit = (e) => {
+  // const handleAddCategoryFormSubmit = (e) => {
+  //   e.preventDefault();
+  //   // Add logic to handle form submission (e.g., sending the category name to the server)
+  //   console.log('New Category Name:', newCategoryName);
+  //   // Reset the form
+  //   setNewCategoryName('');
+  //   // Hide the form
+  //   setShowAddCategoryForm(false);
+  // };
+
+  // const handleAddCategoryFormClose = () => {
+  //   setShowAddCategoryForm(false);
+  // };
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Add logic to handle form submission (e.g., sending the category name to the server)
-    console.log('New Category Name:', newCategoryName);
-    // Reset the form
+    console.log('New Category Name:', category.name, "\nDescription: ",category.description);
+    await api.post('category/register',{category})
+    .then((res)=>{
+      console.log(res.data)
+    }).catch((err)=>{
+      if(err){console.log(err)}
+    })
+
+    // Resets the form
     setNewCategoryName('');
-    // Hide the form
+    // Hides the form
     setShowAddCategoryForm(false);
   };
 
@@ -46,8 +72,14 @@ const BusinessListing = () => {
     setShowAddCategoryForm(false);
   };
 
-  const handleNewCategoryNameChange = (e) => {
-    setNewCategoryName(e.target.value);
+  // const handleNewCategoryNameChange = (e) => {
+  //   setNewCategoryName(e.target.value);
+  // };
+
+  const handleChange = (e) => {
+    console.log(e.value)
+    const {name,value}=e
+    setCategory({...category,[name]:value})
   };
 
   const filteredBusinesses = selectedCategory
@@ -116,14 +148,23 @@ const BusinessListing = () => {
         <div className="add-category-form-overlay">
           <div className="add-category-form-container">
             <h2>Add Category</h2>
-            <form className="add-category-form" onSubmit={handleAddCategoryFormSubmit}>
+            <form className="add-category-form" onSubmit={handleSubmit}>
               <label htmlFor="newCategoryName">Category Name:</label>
               <input
                 type="text"
                 id="newCategoryName"
-                value={newCategoryName}
-                onChange={handleNewCategoryNameChange}
+                name="name"
+                preValue={category.name}
+                onChange={(e)=>handleChange(e.target)}
                 required
+              />
+              <label htmlFor="newCategoryDescription">Category Description:</label>
+              <input
+                type="text"
+                name="description"
+                id="newCategoryDescription"
+                preValue={category.description}
+                onChange={(e)=>handleChange(e.target)}
               />
               <div className="add-category-form-buttons">
                 <button type="submit">Add</button>
