@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './BusinessListing.css';
 import './UserManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,10 +25,26 @@ const BusinessListing = () => {
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newCategoryDescription, setNewCategoryDescription] = useState('');
+  const [categoriesFetched,setCategoriesFetched]=useState([])
   const [category,setCategory]=useState({
     name:"",
     description:""
   })
+
+  useEffect(()=>{
+async function getCategories(){
+  await api.get('category/fetchAll')
+  .then((res)=>{
+    const categories_fetched=res.data.category
+    console.log(categories_fetched)
+    setCategoriesFetched(categories_fetched)
+    
+  })
+}
+getCategories();
+  })
+          
+
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -114,13 +130,13 @@ const BusinessListing = () => {
             >
               All
             </li>
-            {categories.map((category) => (
+            {categoriesFetched.map((fetchedCategory) => (
               <li
-                key={category}
-                className={selectedCategory === category ? 'active' : ''}
-                onClick={() => handleCategoryClick(category)}
+                key={fetchedCategory._id}
+                className={selectedCategory === fetchedCategory ? 'active' : ''}
+                onClick={() => handleCategoryClick(fetchedCategory)}
               >
-                {category}
+                {fetchedCategory.name}
               </li>
             ))}
           </ul>
