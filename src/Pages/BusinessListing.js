@@ -7,22 +7,38 @@ import { faSearch, faBell, faUser, faSignOutAlt, faBuilding, faStore, faHotel, f
 import axios from 'axios';
 import api from '../util/Util';
 // Sample data for businesses and categories
-const businesses = [
-  { id: 1, name: 'Business A', category: 'Category 1', icon: faBuilding },
-  { id: 2, name: 'Business B', category: 'Category 2', icon: faStore },
-  { id: 3, name: 'Business C', category: 'Category 1', icon: faHotel },
-  { id: 4, name: 'Business D', category: 'Category 2', icon: faUtensils },
-  { id: 5, name: 'Business E', category: 'Category 3', icon: faCog },
-  { id: 6, name: 'Business F', category: 'Category 2', icon: faHome },
-  { id: 7, name: 'Business G', category: 'Category 3', icon: faGift },
-  { id: 8, name: 'Business H', category: 'Category 1', icon: faBriefcase },
-  { id: 9, name: 'Business I', category: 'Category 2', icon: faCar },
-  { id: 10, name: 'Business J', category: 'Category 3', icon: faShoppingBag },
-];
+// const businesses = [
+//   { id: 1, name: 'Business A', category: 'Category 1', icon: faBuilding },
+//   { id: 2, name: 'Business B', category: 'Category 2', icon: faStore },
+//   { id: 3, name: 'Business C', category: 'Category 1', icon: faHotel },
+//   { id: 4, name: 'Business D', category: 'Category 2', icon: faUtensils },
+//   { id: 5, name: 'Business E', category: 'Category 3', icon: faCog },
+//   { id: 6, name: 'Business F', category: 'Category 2', icon: faHome },
+//   { id: 7, name: 'Business G', category: 'Category 3', icon: faGift },
+//   { id: 8, name: 'Business H', category: 'Category 1', icon: faBriefcase },
+//   { id: 9, name: 'Business I', category: 'Category 2', icon: faCar },
+//   { id: 10, name: 'Business J', category: 'Category 3', icon: faShoppingBag },
+// ];
 
+
+
+
+
+// business_name
+// email
+// phone
+// category
+// website
+// location
+// address
+// business_days
+// opening_hours
+// average_price
+// description
 
 
 const BusinessListing = () => {
+  const[businesses,setBusinesses]=useState([])
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
@@ -43,8 +59,27 @@ async function getCategories(){
     
   },[])
 }
-getCategories();
+
+async function fetchBusinesses(){
+
+  await api.get('business/fetch-all')
+  .then((res)=>{
+console.log(res.data)
+const data=res.data.businesses
+setBusinesses(data)
+
+  }).catch((err)=>{
+    if(err){
+      console.log('error in fetch businesses :',err)
+    }
+
   })
+}
+ fetchBusinesses();
+
+
+getCategories();
+  },[])
           
 
 
@@ -76,6 +111,7 @@ getCategories();
     await api.post('category/register',{category})
     .then((res)=>{
       console.log(res.data)
+      window.location.reload()
     }).catch((err)=>{
       if(err){console.log(err)}
     })
@@ -101,7 +137,23 @@ getCategories();
   };
 
   const filteredBusinesses = selectedCategory
-    ? businesses.filter((business) => business.category === selectedCategory)
+    ? businesses.filter((business) =>{
+// let filterCategory=[]
+for(var i=0;i<business.category.length;i++){
+  console.log('this is the selected Category',selectedCategory)
+console.log("this is the business category: ",business.category[i])
+        if(business.category[i] === selectedCategory){
+// filterCategory.push(business.category[i])
+return true
+
+        }
+
+      }
+      return false
+
+    } 
+      
+     ) 
     : businesses;
 
   const categories = [...new Set(businesses.map((business) => business.category))];
@@ -135,8 +187,8 @@ getCategories();
             {categoriesFetched.map((fetchedCategory) => (
               <li
                 key={fetchedCategory._id}
-                className={selectedCategory === fetchedCategory ? 'active' : ''}
-                onClick={() => handleCategoryClick(fetchedCategory)}
+                className={selectedCategory === fetchedCategory._id ? 'active' : ''}
+                onClick={() => handleCategoryClick(fetchedCategory._id)}
               >
                 {fetchedCategory.name}
               </li>
@@ -151,9 +203,9 @@ getCategories();
           {filteredBusinesses.length > 0 ? (
             <div className="business-grid">
               {filteredBusinesses.map((business) => (
-                <div key={business.id} className="business-card">
+                <div key={business._id} className="business-card">
                   <FontAwesomeIcon icon={business.icon} className="icon" style={{ size: "lg" }} />
-                  <span className="business-name">{business.name}</span>
+                  <span className="business-name">{business.business_name}</span>
                 </div>
               ))}
             </div>
