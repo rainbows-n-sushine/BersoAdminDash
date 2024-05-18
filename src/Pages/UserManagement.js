@@ -71,9 +71,78 @@ const [users,setUsers]=useState([])
    
     );
 
+      
+  //   const handleView=async(e,id,employee)=>{
+  
+  //     console.log(employeeInfo)
+  //     return await axios.get(`http://localhost:8081/${employee}/getOne/${id}`)
+  //     .then((response)=>{
+  
+  //         const viewData=response.data
+  //         console.log(viewData)
+  
+  //         setEmployeeInfo(viewData)
+  //         setButtonPopup(true)
+      
+          
+          
+  //     })
+  //     .catch((err)=>{
+  //         if(err){console.log(err)}
+  //     })
+  
+  
+  // }
+  // const handleUpdate=async(e,id,employee)=>{
+  
+      
+  //     await axios.get(`http://localhost:8081/${employee}/getOne/${id}`)
+  //     .then((response)=>{
+  //         setEmployeeInfo(response.data)
+  //         console.log(response.data)
+
+  //         setUpdatePopup(true)
+  //     })
+  //     .catch((err)=>{
+  //         if(err){
+  //             console.log(err)
+  //         }
+  //     })
+  
+      
+  
+  // }
+  // const handleDelete=async(e,id,employee)=>{
+  //     console.log(id)
+
+  //        e.preventDefault()
+  // let user=""
+  // await axios.get(`http://localhost:8081/${employee}/getOne/${id}`)
+  // .then((res)=>{
+  // user =res.data.id_tag
+  // }).catch((err)=>{if(err){console.log(err)}})
+
+
+  // await axios.delete(`http://localhost:8081/todo/deleteTodoEmployee/${user}`)
+  // .then((res)=>{alert(res.data)})
+  // .catch((err)=>{if(err){console.log(err)}})
+
+
+  //  await axios.delete(`http://localhost:8081/${employee}/delete/${id}`)
+  // .then((res)=>{console.log("deleted"+ res)})
+  // .catch((err)=>{if(err){console.log(err)}})
+
+  
+  // }
+
+
 
   const handleDeleteUser = (userId) => {
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+    {
+
+        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+    }
+  
   };
 
   const handleSearch = (event) => {
@@ -150,18 +219,18 @@ const [users,setUsers]=useState([])
                   <div className="actions">
                     <button
                       className="btn make-admin"
-                      onClick={() => handleUpdateUserRole(user.id, 'admin')}
+                      onClick={() => handleUpdateUserRole(user._id, 'admin')}
                     >
                       <FontAwesomeIcon icon={faEdit} className="icon" /> 
                     </button>
                    
                     <button
                     className="btn delete-user"
-                    onClick={() => handleDeleteUser(user.id)}
+                    onClick={() => handleDeleteUser(user._id)}
                   >
                     <FontAwesomeIcon icon={faTrash} className="icon" /> 
                   </button>
-                  <Link className="btn view-profile" to={`/user/${user.id}`}>
+                  <Link className="btn view-profile" to={`/user/${user._id}`}>
                     <FontAwesomeIcon icon={faEye} className="icon" /> 
                   </Link>
                 </div>
