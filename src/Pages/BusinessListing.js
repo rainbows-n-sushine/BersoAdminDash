@@ -2,47 +2,16 @@ import React, { useEffect, useState } from 'react';
 import './BusinessListing.css';
 import './UserManagement.css'
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
+//import { fas } from '@fortawesome/free-solid-svg-icons';
 import { debounce } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
 import { Link } from 'react-router-dom';
 import { faSearch, faBell, faUser, faSignOutAlt, faBuilding, faStore, faHotel, faUtensils, faCog, faHome, faGift, faBriefcase, faCar, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import api from '../util/Util';
-
-library.add(fas);
-
-const allIcons = Object.keys(fas).filter(iconName => iconName !== 'prefix');
-
-// Sample data for businesses and categories
-// const businesses = [
-//   { id: 1, name: 'Business A', category: 'Category 1', icon: faBuilding },
-//   { id: 2, name: 'Business B', category: 'Category 2', icon: faStore },
-//   { id: 3, name: 'Business C', category: 'Category 1', icon: faHotel },
-//   { id: 4, name: 'Business D', category: 'Category 2', icon: faUtensils },
-//   { id: 5, name: 'Business E', category: 'Category 3', icon: faCog },
-//   { id: 6, name: 'Business F', category: 'Category 2', icon: faHome },
-//   { id: 7, name: 'Business G', category: 'Category 3', icon: faGift },
-//   { id: 8, name: 'Business H', category: 'Category 1', icon: faBriefcase },
-//   { id: 9, name: 'Business I', category: 'Category 2', icon: faCar },
-//   { id: 10, name: 'Business J', category: 'Category 3', icon: faShoppingBag },
-// ];
-
-
-
-
-
-// business_name
-// email
-// phone
-// category
-// website
-// location
-// address
-// business_days
-// opening_hours
-// average_price
-// description
 
 
 const BusinessListing = () => {
@@ -56,21 +25,33 @@ const BusinessListing = () => {
   const [category,setCategory]=useState({
     name:"",
     description:"",
-    category:""
+    icon:""
   })
+  
+
+
+  library.add(fas,far,fab);
+const allIcons = Object.keys(fas,far,fab).filter(iconName => iconName !== 'prefix');
+
 
   useEffect(()=>{
 async function getCategories(){
   await api.get('category/fetchAll')
   .then((res)=>{
-    const categories_fetched=res.data.category
+    const categories_fetched=res.data.categories
     console.log(categories_fetched)
     setCategoriesFetched(categories_fetched)
-    
-  },[])
+  
+   
+  })
+  .catch((err)=>{
+
+    if(err){
+
+      console.log('error in getCategories : ',err.messsage)
+    }
+  })
 }
-
-
 async function fetchBusinesses(){
 
   await api.get('business/fetch-all')
@@ -86,10 +67,9 @@ setBusinesses(data)
 
   })
 }
- fetchBusinesses();
-
-
+fetchBusinesses();
 getCategories();
+
   },[])
           
 
@@ -102,20 +82,6 @@ getCategories();
     setShowAddCategoryForm(true);
   };
 
-  // const handleAddCategoryFormSubmit = (e) => {
-  //   e.preventDefault();
-  //   // Add logic to handle form submission (e.g., sending the category name to the server)
-  //   console.log('New Category Name:', newCategoryName);
-  //   // Reset the form
-  //   setNewCategoryName('');
-  //   // Hide the form
-  //   setShowAddCategoryForm(false);
-  // };
-
-  // const handleAddCategoryFormClose = () => {
-  //   setShowAddCategoryForm(false);
-  // };
-  
   const handleSearch = debounce((value) => {
   setSearchTerm(value);
 }, 300);
@@ -177,6 +143,11 @@ return true
     : businesses;
 
   const categories = [...new Set(businesses.map((business) => business.category))];
+
+
+
+
+
 
   return (
     <div>
@@ -268,15 +239,21 @@ return true
           <div
             key={iconName}
             className="icon-item"
-            onClick={() => {
+            name="icon"
+            value={iconName}
+            onClick={(e) => {
 
               //  onSelect(iconName)
-              setCategory(iconName)
+              handleChange(e.target)
             }           
             }
           >
-            <FontAwesomeIcon icon={['fas', iconName]} />
-            <span>{iconName}</span>
+            <span><FontAwesomeIcon icon={['fas',iconName]} /></span>
+            <span><FontAwesomeIcon icon={['far', iconName ]} /></span>
+            <span><FontAwesomeIcon icon={['fab', iconName ]} /></span>
+
+            
+            {/* <span>{iconName}</span> */}
           </div>
         ))}
       </div>
