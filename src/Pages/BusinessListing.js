@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './BusinessListing.css';
-import './UserManagement.css';
+import './UserManagement.css'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { debounce } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { faSearch, faBell, faUser, faSignOutAlt, faBuilding, faStore, faHotel, faUtensils, faCog, faHome, faGift, faBriefcase, faCar, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import api from '../util/Util';
+
+library.add(fas);
+
+const allIcons = Object.keys(fas).filter(iconName => iconName !== 'prefix');
+
 // Sample data for businesses and categories
 // const businesses = [
 //   { id: 1, name: 'Business A', category: 'Category 1', icon: faBuilding },
@@ -44,9 +52,11 @@ const BusinessListing = () => {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newCategoryDescription, setNewCategoryDescription] = useState('');
   const [categoriesFetched,setCategoriesFetched]=useState([])
+  const [searchTerm, setSearchTerm] = useState('');
   const [category,setCategory]=useState({
     name:"",
-    description:""
+    description:"",
+    category:""
   })
 
   useEffect(()=>{
@@ -59,6 +69,7 @@ async function getCategories(){
     
   },[])
 }
+
 
 async function fetchBusinesses(){
 
@@ -104,6 +115,15 @@ getCategories();
   // const handleAddCategoryFormClose = () => {
   //   setShowAddCategoryForm(false);
   // };
+  
+  const handleSearch = debounce((value) => {
+  setSearchTerm(value);
+}, 300);
+
+const filteredIcons = allIcons.filter(iconName =>
+  iconName.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
   const handleSubmit = async(e) => {
     e.preventDefault();
     // Add logic to handle form submission (e.g., sending the category name to the server)
@@ -236,6 +256,31 @@ return true
                 preValue={category.description}
                 onChange={(e)=>handleChange(e.target)}
               />
+
+      <label htmlFor="newCategoryIcon">Category Icon:</label>
+      <input
+        type="text"
+        placeholder="Search icons..."
+        onChange={(e) => handleSearch(e.target.value)}
+      />
+      <div className="icon-list">
+        {filteredIcons.map((iconName) => (
+          <div
+            key={iconName}
+            className="icon-item"
+            onClick={() => {
+
+              //  onSelect(iconName)
+              setCategory(iconName)
+            }           
+            }
+          >
+            <FontAwesomeIcon icon={['fas', iconName]} />
+            <span>{iconName}</span>
+          </div>
+        ))}
+      </div>
+              
               <div className="add-category-form-buttons">
                 <button type="submit">Add</button>
                 <button type="button" onClick={handleAddCategoryFormClose}>
