@@ -1,20 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Table from 'react-bootstrap/Table';
 import { faHome, faChartBar, faCog, faSearch, faBell, faUser, faSignOutAlt, faEye, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import './UserManagement.css';
+import api from '../util/Util';
 
 const UserManagement = () => {
-  const [users, setUsers] = useState([
-    { id: 1, name: 'John Doe', email: 'johndoe@example.com', role: 'Business Owner' },
-    { id: 2, name: 'Jane Smith', email: 'janesmith@example.com', role: 'user' },
-    { id: 3, name: 'Alice Johnson', email: 'alicejohnson@example.com', role: 'user' },
-    { id: 4, name: 'John Doe', email: 'johndoe@example.com', role: 'Business Owner' },
-    { id: 5, name: 'Jane Smith', email: 'janesmith@example.com', role: 'user' },
-    { id: 6, name: 'John Doe', email: 'johndoe@example.com', role: 'Business Owner' },
-    { id: 7, name: 'Jane Smith', email: 'janesmith@example.com', role: 'user' },
-  ]);
+  // const [users, setUsers] = useState([
+  //   { id: 1, name: 'John Doe', email: 'johndoe@example.com', role: 'Business Owner' },
+  //   { id: 2, name: 'Jane Smith', email: 'janesmith@example.com', role: 'user' },
+  //   { id: 3, name: 'Alice Johnson', email: 'alicejohnson@example.com', role: 'user' },
+  //   { id: 4, name: 'John Doe', email: 'johndoe@example.com', role: 'Business Owner' },
+  //   { id: 5, name: 'Jane Smith', email: 'janesmith@example.com', role: 'user' },
+  //   { id: 6, name: 'John Doe', email: 'johndoe@example.com', role: 'Business Owner' },
+  //   { id: 7, name: 'Jane Smith', email: 'janesmith@example.com', role: 'user' },
+  // ]);
+const [users,setUsers]=useState([])
+// const [filteredUsers,setFilteredUsers]=useState([])
+
+  useEffect(()=>{
+  const fetchUsers= async ()=>{
+   await api.get('user/fetch-all')
+    .then((res)=>{
+     console.log(res.data)
+     const fetchedUsers=res.data.users
+    setUsers(fetchedUsers)
+    
+
+
+
+    }).catch((err)=>{
+
+      if(err){
+        console.log('this is the error in fetch users: ',err)
+      }
+    })
+
+
+
+
+  
+  }
+
+  fetchUsers();
+
+
+  },[])
+
+
+
 
   const [searchQuery, setSearchQuery] = useState('');
   const handleUpdateUserRole = (userId, newRole) => {
@@ -24,18 +59,98 @@ const UserManagement = () => {
       )
     );
   };
+  
+  
+  const filteredUsers = users.filter((user) =>{
+     user.name && console.log('this is the user in filer ', user.name.toLowerCase().includes(searchQuery.toLowerCase()))
+     if(user.name && user.name.toLowerCase().includes(searchQuery.toLowerCase()))
+      return user;
+     
+
+  }
+   
+    );
+
+      
+  //   const handleView=async(e,id,employee)=>{
+  
+  //     console.log(employeeInfo)
+  //     return await axios.get(`http://localhost:8081/${employee}/getOne/${id}`)
+  //     .then((response)=>{
+  
+  //         const viewData=response.data
+  //         console.log(viewData)
+  
+  //         setEmployeeInfo(viewData)
+  //         setButtonPopup(true)
+      
+          
+          
+  //     })
+  //     .catch((err)=>{
+  //         if(err){console.log(err)}
+  //     })
+  
+  
+  // }
+  // const handleUpdate=async(e,id,employee)=>{
+  
+      
+  //     await axios.get(`http://localhost:8081/${employee}/getOne/${id}`)
+  //     .then((response)=>{
+  //         setEmployeeInfo(response.data)
+  //         console.log(response.data)
+
+  //         setUpdatePopup(true)
+  //     })
+  //     .catch((err)=>{
+  //         if(err){
+  //             console.log(err)
+  //         }
+  //     })
+  
+      
+  
+  // }
+  // const handleDelete=async(e,id,employee)=>{
+  //     console.log(id)
+
+  //        e.preventDefault()
+  // let user=""
+  // await axios.get(`http://localhost:8081/${employee}/getOne/${id}`)
+  // .then((res)=>{
+  // user =res.data.id_tag
+  // }).catch((err)=>{if(err){console.log(err)}})
+
+
+  // await axios.delete(`http://localhost:8081/todo/deleteTodoEmployee/${user}`)
+  // .then((res)=>{alert(res.data)})
+  // .catch((err)=>{if(err){console.log(err)}})
+
+
+  //  await axios.delete(`http://localhost:8081/${employee}/delete/${id}`)
+  // .then((res)=>{console.log("deleted"+ res)})
+  // .catch((err)=>{if(err){console.log(err)}})
+
+  
+  // }
+
+
 
   const handleDeleteUser = (userId) => {
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+    {
+
+        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+    }
+  
   };
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
+ 
 
   return (
     <div>
@@ -94,27 +209,28 @@ const UserManagement = () => {
           </thead>
           <tbody>
             {filteredUsers.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
+              <tr key={user._id}>
+                <td>{user._id}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>{user.role}</td>
+                {/* <td>{user.role}</td> */}
+                <td>{user.username}</td>
                 <td>
                   <div className="actions">
                     <button
                       className="btn make-admin"
-                      onClick={() => handleUpdateUserRole(user.id, 'admin')}
+                      onClick={() => handleUpdateUserRole(user._id, 'admin')}
                     >
                       <FontAwesomeIcon icon={faEdit} className="icon" /> 
                     </button>
                    
                     <button
                     className="btn delete-user"
-                    onClick={() => handleDeleteUser(user.id)}
+                    onClick={() => handleDeleteUser(user._id)}
                   >
                     <FontAwesomeIcon icon={faTrash} className="icon" /> 
                   </button>
-                  <Link className="btn view-profile" to={`/user/${user.id}`}>
+                  <Link className="btn view-profile" to={`/user/${user._id}`}>
                     <FontAwesomeIcon icon={faEye} className="icon" /> 
                   </Link>
                 </div>
