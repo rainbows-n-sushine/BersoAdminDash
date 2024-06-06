@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   faHome,
   faChartBar,
@@ -16,11 +16,13 @@ import {
   faStore,
   faLayerGroup,
   faArrowLeft,
-  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 import img from "../images/logo-removebg.png";
-const ProblemReports = () => {
+const ReportDetail = () => {
+  const { id } = useParams();
+
+  // Dummy data inside the component
   const reports = [
     {
       id: 1,
@@ -39,6 +41,7 @@ const ProblemReports = () => {
       type: "Inappropriate Action",
       user: "user123",
       business: "Business ABC",
+      stepsTaken: ["Reported comment to moderation team", "User warned"],
     },
     {
       id: 3,
@@ -58,31 +61,17 @@ const ProblemReports = () => {
     },
   ];
 
-
- const [reportList, setReportList] = useState(reports);
- const [filter, setFilter] = useState("All");
-
- const handleResolve = (id) => {
-   const updatedReports = reportList.map((report) =>
-     report.id === id ? { ...report, status: "resolved" } : report
-   );
-   setReportList(updatedReports);
- };
-
- const handleDelete = (id) => {
-   const updatedReports = reportList.filter((report) => report.id !== id);
-   setReportList(updatedReports);
- };
-
- const handleFilterChange = (type) => {
-   setFilter(type);
- };
-
- const filteredReports =
-   filter === "All"
-     ? reportList
-     : reportList.filter((report) => report.type === filter);
-
+  // Find the report by ID
+   console.log("ID from useParams:", id);
+   const report = reports.find((report) => report.id === parseInt(id));
+   console.log("Found report:", report);
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Add your logic to handle report submission here
+    // For simplicity, let's just console.log the input values
+    console.log("Report submitted!");
+  };
 
   return (
     <div className="report-container flex flex-col h-screen">
@@ -141,10 +130,7 @@ const ProblemReports = () => {
                 </Link>
               </li>
               <li className="mb-4">
-                <Link
-                  to="/ProblemReports"
-                  className="flex items-center text-xl"
-                >
+                <Link to="/ReportDetail" className="flex items-center text-xl">
                   <FontAwesomeIcon icon={faChartBar} className="text-xl mr-3" />{" "}
                   Problem Reports
                 </Link>
@@ -159,103 +145,77 @@ const ProblemReports = () => {
           </div>
         </div>
         <div className="dashboard-content-right flex flex-col flex-1 p-4  bg-orange-50">
+          <div className=" flex justify-between items-center p-4 bg-white text-black shadow">
+            <Link to="/ProblemReports" className="flex items-center">
+              <FontAwesomeIcon icon={faArrowLeft} className="text-lg mr-2" />
+              Back to List of reports
+            </Link>
+          </div>
           <div className=" flex m-4  ml-5 items-center">
             <FontAwesomeIcon icon={faChartBar} className="text-xl mr-3 " />
-            <h1 className="font-bold text-2xl">Problem Reports</h1>
+            <h1 className="font-bold text-2xl">Report Detail</h1>
           </div>
-          {/*<div className="top-bar flex justify-between items-center p-4 bg-white text-black shadow">
-             <Link to="/" className="flex items-center">
-              <FontAwesomeIcon icon={faArrowLeft} className="text-lg mr-2" />
-              Back to Dashboard
-            </Link>
-            <h1 className="text-xl font-bold">Problem Reports</h1>
-            <div></div> 
-          </div>*/}
-          <div className="filter-bar flex justify-center my-4">
-            {[
-              "All",
-              "Technical Issue",
-              "Inappropriate Action",
-              "Feature Request",
-              "Business Issue",
-            ].map((type) => (
-              <button
-                key={type}
-                className={`mx-2 px-4 py-2 rounded ${
-                  filter === type ? "bg-blue-500 text-white" : "bg-gray-200"
-                }`}
-                onClick={() => handleFilterChange(type)}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-          <div className="reports-list mt-4">
-            {filteredReports.map((report) => (
-              <div
-                key={report.id}
-                className="report-item p-4 border-b bg-white rounded-lg shadow mb-4"
-              >
-                <h2 className="font-bold">
-                  <Link to="/ReportDetail/:id" className="text-blue-500">
-                    {report.title}
-                  </Link>
-                </h2>
-                <p>{report.description}</p>
-                <p className="text-gray-500">{report.date}</p>
-                <p
-                  className={`status text-${
-                    report.status === "resolved" ? "green" : "red"
-                  }-500 font-bold`}
-                >
-                  {report.status === "resolved" ? "Resolved" : "Pending"}
+          {/* <div className="report-details p-4 bg-white rounded-lg shadow mb-4">
+            <h1 className="text-2xl font-bold mb-2">{report.title}</h1>
+            <p className="mb-2">
+              <strong>Description:</strong> {report.description}
+            </p>
+            <p className="text-gray-500 mb-2">
+              <strong>Date:</strong> {report.date}
+            </p>
+            <p
+              className={`status text-${
+                report.status === "resolved" ? "green" : "red"
+              }-500 font-bold mb-2`}
+            >
+              {report.status === "resolved" ? "Resolved" : "Pending"}
+            </p>
+            <p className="mb-2">
+              <strong>Type:</strong> {report.type}
+            </p>
+            {report.type === "Inappropriate Action" && (
+              <div className="inappropriate-details mb-2">
+                <p className="mb-2">
+                  <strong>User:</strong> {report.user}
                 </p>
                 <p className="mb-2">
-                  <strong>Type:</strong> {report.type}
+                  <strong>Business:</strong> {report.business}
                 </p>
-                <div className="actions mt-2">
-                  {report.status === "pending" && (
-                    <button
-                      className="btn-resolve mr-2 p-2 bg-green-500 text-white rounded"
-                      onClick={() => handleResolve(report.id)}
-                    >
-                      <FontAwesomeIcon icon={faCheck} className="mr-1" />{" "}
-                      Resolve
-                    </button>
-                  )}
-                  <button
-                    className="btn-delete p-2 bg-red-500 text-white rounded"
-                    onClick={() => handleDelete(report.id)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
-                  </button>
-                </div>
+              </div>
+            )}
+            {report.stepsTaken && report.stepsTaken.length > 0 && (
+              <div className="steps-taken mb-2">
+                <p className="mb-2">
+                  <strong>Steps Taken:</strong>
+                </p>
+                <ul className="list-disc list-inside">
+                  {report.stepsTaken.map((step, index) => (
+                    <li key={index}>{step}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div> */}
+          {/* <div className="reports-list">
+            {sampleReports.map((report) => (
+              <div
+                key={report.id}
+                className="report-item p-4 border-b bg-white rounded-xl mb-3 "
+              >
+                <h2>{report.id}</h2>
+                <h2 className="font-bold text-xl">{report.title}</h2>
+                <p>{report.description}</p>
+                <p className="text-gray-500">{report.date}</p>
               </div>
             ))}
-            {filteredReports.length === 0 && (
+            {sampleReports.length === 0 && (
               <p className="text-center mt-4">No problem reports found.</p>
             )}
-            {/* {sampleReports.map((report) => (
-              <Link to="/ReportDetail">
-                <div
-                  key={report.id}
-                  className="report-item p-4 border-b bg-white rounded-xl mb-3 "
-                >
-                  <h2>{report.id}</h2>
-                  <h2 className="font-bold text-xl">{report.title}</h2>
-                  <p>{report.description}</p>
-                  <p className="text-gray-500">{report.date}</p>
-                </div>
-              </Link>
-            ))} */}
-            {/* {sampleReports.length === 0 && (
-              <p className="text-center mt-4">No problem reports found.</p>
-            )} */}
-          </div>
+          </div>*/}
         </div>
       </div>
     </div>
   );
 };
 
-export default ProblemReports;
+export default ReportDetail;

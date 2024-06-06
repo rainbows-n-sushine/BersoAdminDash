@@ -48,25 +48,31 @@ const BusinessListing = () => {
   });
   const [activeTab, setActiveTab] = useState("businesses"); // New state for tab selection
 
+  // library.add(fas, far, fab);
+  // const allIcons = Object.keys(fas, far, fab).filter(
+  //   (iconName) => iconName !== "prefix"
+  // );
+
   useEffect(() => {
     async function getCategories() {
       await api
         .get("category/fetchAll")
         .then((res) => {
           const categories_fetched = res.data.categories;
+          console.log(categories_fetched);
           setCategoriesFetched(categories_fetched);
         })
         .catch((err) => {
           if (err) {
-            console.log("error in getCategories : ", err.message);
+            console.log("error in getCategories : ", err.messsage);
           }
         });
     }
-
     async function fetchBusinesses() {
       await api
         .get("business/fetch-all")
         .then((res) => {
+          console.log(res.data);
           const data = res.data.businesses;
           setBusinesses(data);
         })
@@ -76,7 +82,6 @@ const BusinessListing = () => {
           }
         });
     }
-
     fetchBusinesses();
     getCategories();
   }, []);
@@ -99,9 +104,17 @@ const BusinessListing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Add logic to handle form submission (e.g., sending the category name to the server)
+    console.log(
+      "New Category Name:",
+      category.name,
+      "\nDescription: ",
+      category.description
+    );
     await api
       .post("category/register", { category })
       .then((res) => {
+        console.log(res.data);
         window.location.reload();
       })
       .catch((err) => {
@@ -110,7 +123,9 @@ const BusinessListing = () => {
         }
       });
 
+    // Resets the form
     setNewCategoryName("");
+    // Hides the form
     setShowAddCategoryForm(false);
   };
 
@@ -119,14 +134,24 @@ const BusinessListing = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    console.log(e.value);
+    const { name, value } = e;
     setCategory({ ...category, [name]: value });
   };
 
   const filteredBusinesses = selectedCategory
-    ? businesses.filter((business) =>
-        business.category.includes(selectedCategory)
-      )
+    ? businesses.filter((business) => {
+        // let filterCategory=[]
+        for (var i = 0; i < business.category.length; i++) {
+          console.log("this is the selected Category", selectedCategory);
+          console.log("this is the business category: ", business.category[i]);
+          if (business.category[i] === selectedCategory) {
+            // filterCategory.push(business.category[i])
+            return true;
+          }
+        }
+        return false;
+      })
     : businesses;
 
   const categories = [
