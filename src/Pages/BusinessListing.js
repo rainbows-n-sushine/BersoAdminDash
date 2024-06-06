@@ -15,63 +15,63 @@ import api from '../util/Util';
 
 
 const BusinessListing = () => {
-  const[businesses,setBusinesses]=useState([])
+  const [businesses, setBusinesses] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newCategoryDescription, setNewCategoryDescription] = useState('');
-  const [categoriesFetched,setCategoriesFetched]=useState([])
+  const [categoriesFetched, setCategoriesFetched] = useState([])
   const [searchTerm, setSearchTerm] = useState('');
-  const [category,setCategory]=useState({
-    name:"",
-    description:"",
-    icon:""
+  const [category, setCategory] = useState({
+    name: "",
+    description: "",
+    icon: ""
   })
-  
 
 
-  library.add(fas,far,fab);
-const allIcons = Object.keys(fas,far,fab).filter(iconName => iconName !== 'prefix');
+
+  library.add(fas, far, fab);
+  const allIcons = Object.keys(fas, far, fab).filter(iconName => iconName !== 'prefix');
 
 
-  useEffect(()=>{
-async function getCategories(){
-  await api.get('category/fetchAll')
-  .then((res)=>{
-    const categories_fetched=res.data.categories
-    console.log(categories_fetched)
-    setCategoriesFetched(categories_fetched)
-  
-   
-  })
-  .catch((err)=>{
+  useEffect(() => {
+    async function getCategories() {
+      await api.get('category/fetchAll')
+        .then((res) => {
+          const categories_fetched = res.data.categories
+          console.log(categories_fetched)
+          setCategoriesFetched(categories_fetched)
 
-    if(err){
 
-      console.log('error in getCategories : ',err.messsage)
+        })
+        .catch((err) => {
+
+          if (err) {
+
+            console.log('error in getCategories : ', err.messsage)
+          }
+        })
     }
-  })
-}
-async function fetchBusinesses(){
+    async function fetchBusinesses() {
 
-  await api.get('business/fetch-all')
-  .then((res)=>{
-console.log(res.data)
-const data=res.data.businesses
-setBusinesses(data)
+      await api.get('business/fetch-all')
+        .then((res) => {
+          console.log(res.data)
+          const data = res.data.businesses
+          setBusinesses(data)
 
-  }).catch((err)=>{
-    if(err){
-      console.log('error in fetch businesses :',err)
+        }).catch((err) => {
+          if (err) {
+            console.log('error in fetch businesses :', err)
+          }
+
+        })
     }
+    fetchBusinesses();
+    getCategories();
 
-  })
-}
-fetchBusinesses();
-getCategories();
+  }, [])
 
-  },[])
-          
 
 
   const handleCategoryClick = (category) => {
@@ -83,24 +83,24 @@ getCategories();
   };
 
   const handleSearch = debounce((value) => {
-  setSearchTerm(value);
-}, 300);
+    setSearchTerm(value);
+  }, 300);
 
-const filteredIcons = allIcons.filter(iconName =>
-  iconName.toLowerCase().includes(searchTerm.toLowerCase())
-);
+  const filteredIcons = allIcons.filter(iconName =>
+    iconName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Add logic to handle form submission (e.g., sending the category name to the server)
-    console.log('New Category Name:', category.name, "\nDescription: ",category.description);
-    await api.post('category/register',{category})
-    .then((res)=>{
-      console.log(res.data)
-      window.location.reload()
-    }).catch((err)=>{
-      if(err){console.log(err)}
-    })
+    console.log('New Category Name:', category.name, "\nDescription: ", category.description);
+    await api.post('category/register', { category })
+      .then((res) => {
+        console.log(res.data)
+        window.location.reload()
+      }).catch((err) => {
+        if (err) { console.log(err) }
+      })
 
     // Resets the form
     setNewCategoryName('');
@@ -118,28 +118,28 @@ const filteredIcons = allIcons.filter(iconName =>
 
   const handleChange = (e) => {
     console.log(e.value)
-    const {name,value}=e
-    setCategory({...category,[name]:value})
+    const { name, value } = e
+    setCategory({ ...category, [name]: value })
   };
 
   const filteredBusinesses = selectedCategory
-    ? businesses.filter((business) =>{
-// let filterCategory=[]
-for(var i=0;i<business.category.length;i++){
-  console.log('this is the selected Category',selectedCategory)
-console.log("this is the business category: ",business.category[i])
-        if(business.category[i] === selectedCategory){
-// filterCategory.push(business.category[i])
-return true
+    ? businesses.filter((business) => {
+      // let filterCategory=[]
+      for (var i = 0; i < business.category.length; i++) {
+        console.log('this is the selected Category', selectedCategory)
+        console.log("this is the business category: ", business.category[i])
+        if (business.category[i] === selectedCategory) {
+          // filterCategory.push(business.category[i])
+          return true
 
         }
 
       }
       return false
 
-    } 
-      
-     ) 
+    }
+
+    )
     : businesses;
 
   const categories = [...new Set(businesses.map((business) => business.category))];
@@ -166,7 +166,7 @@ return true
         <div className="categories">
           <div className='user-management'>
             <h2>Categories</h2>
-           
+
           </div>
           <ul>
             <li
@@ -187,9 +187,9 @@ return true
           </ul>
         </div>
         <div className="businesses">
-        <button className="add-category-button" onClick={handleAddCategoryClick}>
-              Add Categories
-            </button>
+          <button className="add-category-button" onClick={handleAddCategoryClick}>
+            Add Categories
+          </button>
           <h2>Businesses</h2>
           {filteredBusinesses.length > 0 ? (
             <div className="business-grid">
@@ -200,75 +200,75 @@ return true
                 </div>
               ))}
             </div>
-            
+
           ) : (
             <p>No businesses found.</p>
           )}
         </div>
         {showAddCategoryForm && (
-        <div className="add-category-form-overlay">
-          <div className="add-category-form-container">
-            <h2>Add Category</h2>
-            <form className="add-category-form" onSubmit={handleSubmit}>
-              <label htmlFor="newCategoryName">Category Name:</label>
-              <input
-                type="text"
-                id="newCategoryName"
-                name="name"
-                preValue={category.name}
-                onChange={(e)=>handleChange(e.target)}
-                required
-              />
-              <label htmlFor="newCategoryDescription">Category Description:</label>
-              <input
-                type="text"
-                name="description"
-                id="newCategoryDescription"
-                preValue={category.description}
-                onChange={(e)=>handleChange(e.target)}
-              />
+          <div className="add-category-form-overlay">
+            <div className="add-category-form-container">
+              <h2>Add Category</h2>
+              <form className="add-category-form" onSubmit={handleSubmit}>
+                <label htmlFor="newCategoryName">Category Name:</label>
+                <input
+                  type="text"
+                  id="newCategoryName"
+                  name="name"
+                  preValue={category.name}
+                  onChange={(e) => handleChange(e.target)}
+                  required
+                />
+                <label htmlFor="newCategoryDescription">Category Description:</label>
+                <input
+                  type="text"
+                  name="description"
+                  id="newCategoryDescription"
+                  preValue={category.description}
+                  onChange={(e) => handleChange(e.target)}
+                />
 
-      <label htmlFor="newCategoryIcon">Category Icon:</label>
-      <input
-        type="text"
-        placeholder="Search icons..."
-        onChange={(e) => handleSearch(e.target.value)}
-      />
-      <div className="icon-list">
-        {filteredIcons.map((iconName) => (
-          <div
-            key={iconName}
-            className="icon-item"
-            name="icon"
-            value={iconName}
-            onClick={(e) => {
+                <label htmlFor="newCategoryIcon">Category Icon:</label>
+                <input
+                  type="text"
+                  placeholder="Search icons..."
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
+                <div className="icon-list">
+                  {filteredIcons.map((iconName) => (
+                    <div
+                      key={iconName}
+                      className="icon-item"
+                      name="icon"
+                      value={iconName}
+                      onClick={(e) => {
 
-              //  onSelect(iconName)
-              handleChange(e.target)
-            }           
-            }
-          >
-            <span><FontAwesomeIcon icon={['fas',iconName]} /></span>
-            <span><FontAwesomeIcon icon={['far', iconName ]} /></span>
-            <span><FontAwesomeIcon icon={['fab', iconName ]} /></span>
+                        //  onSelect(iconName)
+                        handleChange(e.target)
+                      }
+                      }
+                    >
+                      <span><FontAwesomeIcon icon={['fas', "faBuilding"]} /></span>
+                      {/* <span><FontAwesomeIcon icon={['far', iconName]} /></span>
+                      <span><FontAwesomeIcon icon={['fab', iconName]} /></span> */}
 
-            
-            {/* <span>{iconName}</span> */}
+
+                      {/* <span>{iconName}</span> */}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="add-category-form-buttons">
+                  <button type="submit">Add</button>
+                  <button type="button" onClick={handleAddCategoryFormClose}>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        ))}
+        )}
       </div>
-              
-              <div className="add-category-form-buttons">
-                <button type="submit">Add</button>
-                <button type="button" onClick={handleAddCategoryFormClose}>
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-    </div>
     </div>
   );
 };
