@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { debounce } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { fas, far, fab } from "@fortawesome/free-solid-svg-icons";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 import {
   faSearch,
   faBell,
@@ -28,10 +28,10 @@ import { Link } from "react-router-dom";
 import * as solidIcons from "@fortawesome/free-solid-svg-icons";
 import "./BusinessListing.css"; // if you have additional custom CSS
 import img from "../images/logo-removebg.png";
-// library.add(fas, far, fab);
-// const allIcons = Object.keys(solidIcons).filter(
-//   (iconName) => iconName !== "prefix"
-// );
+library.add(fas);
+const allIcons = Object.keys(solidIcons).filter(
+  (iconName) => iconName !== "prefix"
+);
 
 const BusinessListing = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -48,10 +48,8 @@ const BusinessListing = () => {
   });
   const [activeTab, setActiveTab] = useState("businesses"); // New state for tab selection
 
-  // library.add(fas, far, fab);
-  // const allIcons = Object.keys(fas, far, fab).filter(
-  //   (iconName) => iconName !== "prefix"
-  // );
+  library.add(fas);
+  const allIcons = Object.keys(fas).filter((iconName) => iconName !== "prefix");
 
   useEffect(() => {
     async function getCategories() {
@@ -98,16 +96,16 @@ const BusinessListing = () => {
     setSearchTerm(value);
   }, 300);
 
-// const filteredIcons = allIcons.filter(iconName =>
-//   iconName.toLowerCase().includes(searchTerm.toLowerCase())
-// );
+  // const filteredIcons = allIcons.filter(iconName =>
+  //   iconName.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
-// const filteredIcons = allIcons.filter((iconName) =>
-//   iconName.toLowerCase().includes(searchTerm.toLowerCase())
-// );
-const filteredIcons = allIcons.filter((iconName) =>
-  iconName.toLowerCase().includes(searchTerm.toLowerCase())
-);
+  // const filteredIcons = allIcons.filter((iconName) =>
+  //   iconName.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+  const filteredIcons = allIcons.filter((iconName) =>
+    iconName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -116,7 +114,9 @@ const filteredIcons = allIcons.filter((iconName) =>
       "New Category Name:",
       category.name,
       "\nDescription: ",
-      category.description
+      category.description,
+      "Icon: ",
+      category.icon
     );
     await api
       .post("category/register", { category })
@@ -141,8 +141,7 @@ const filteredIcons = allIcons.filter((iconName) =>
   };
 
   const handleChange = (e) => {
-    console.log(e.value);
-    const { name, value } = e;
+    const { name, value } = e.target;
     setCategory({ ...category, [name]: value });
   };
 
@@ -418,7 +417,7 @@ const filteredIcons = allIcons.filter((iconName) =>
                 />
                 {dropdownVisible && (
                   <div className="absolute z-10 bg-white border rounded-md mt-1 w-full max-h-64 overflow-auto">
-                    {/* {filteredIcons.map((iconName) => (
+                    {filteredIcons.map((iconName) => (
                       <div
                         key={iconName}
                         className="p-2 flex items-center cursor-pointer hover:bg-gray-100"
@@ -430,7 +429,7 @@ const filteredIcons = allIcons.filter((iconName) =>
                         />
                         <span>{iconName}</span>
                       </div>
-                    ))} */}
+                    ))}
                   </div>
                 )}
               </div>
