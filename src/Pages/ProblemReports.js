@@ -182,7 +182,7 @@ const ProblemReports = () => {
               <button
                 key={type}
                 className={`mx-2 px-4 py-2 rounded ${
-                  filter === type ? "bg-blue-500 text-white" : "bg-gray-200"
+                  filter === type ? "bg-orange-400 text-white" : "bg-gray-200"
                 }`}
                 onClick={() => handleFilterChange(type)}
               >
@@ -194,26 +194,31 @@ const ProblemReports = () => {
             {filteredReports.map((report) => (
               <div
                 key={report.id}
-                className="report-item p-4 border-b bg-white rounded-lg shadow mb-4"
+                className="report-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between "
               >
-                <h2 className="font-bold">
-                  <Link to="/ReportDetail/:id" className="text-blue-500">
-                    {report.title}
-                  </Link>
-                </h2>
-                <p>{report.description}</p>
-                <p className="text-gray-500">{report.date}</p>
-                <p
-                  className={`status text-${
-                    report.status === "resolved" ? "green" : "red"
-                  }-500 font-bold`}
-                >
-                  {report.status === "resolved" ? "Resolved" : "Pending"}
-                </p>
-                <p className="mb-2">
-                  <strong>Type:</strong> {report.type}
-                </p>
-                <div className="actions mt-2">
+                <div className="flex-col">
+                  <h2 className="font-bold">
+                    <Link
+                      to="/ReportDetail/:id"
+                      className="text-orange-500 font-bold text-xl"
+                    >
+                      {report.title}
+                    </Link>
+                  </h2>
+                  <p>{report.description}</p>
+                  <p className="text-gray-500">{report.date}</p>
+                  <p
+                    className={`status text-${
+                      report.status === "resolved" ? "green" : "red"
+                    }-500 font-bold`}
+                  >
+                    {report.status === "resolved" ? "Resolved" : "Pending"}
+                  </p>
+                  <p className="mb-2">
+                    <strong>Type:</strong> {report.type}
+                  </p>
+                </div>
+                <div className="actions mt-2 flex">
                   {report.status === "pending" && (
                     <button
                       className="btn-resolve mr-2 p-2 bg-green-500 text-white rounded"
