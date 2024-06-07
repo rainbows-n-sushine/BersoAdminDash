@@ -124,11 +124,6 @@ const BusinessListing = () => {
     setSearchTerm(value);
   }, 300);
 
-<<<<<<< HEAD
-  const filteredIcons = allIcons.filter(iconName =>
-    iconName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-=======
 // const filteredIcons = allIcons.filter(iconName =>
 //   iconName.toLowerCase().includes(searchTerm.toLowerCase())
 // );
@@ -139,7 +134,6 @@ const BusinessListing = () => {
 const filteredIcons = allIcons.filter((iconName) =>
   iconName.toLowerCase().includes(searchTerm.toLowerCase())
 );
->>>>>>> 2ea8f393f526abcc7c236a56b966d6317c504089
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -225,10 +219,6 @@ const handleIconSelect = (iconName) => {
         <div className="categories">
           <div className="user-management">
             <h2>Categories</h2>
-<<<<<<< HEAD
-
-=======
->>>>>>> 2ea8f393f526abcc7c236a56b966d6317c504089
           </div>
           <ul>
             <li
@@ -251,14 +241,10 @@ const handleIconSelect = (iconName) => {
           </ul>
         </div>
         <div className="businesses">
-<<<<<<< HEAD
-          <button className="add-category-button" onClick={handleAddCategoryClick}>
-=======
           <button
             className="add-category-button"
             onClick={handleAddCategoryClick}
           >
->>>>>>> 2ea8f393f526abcc7c236a56b966d6317c504089
             Add Categories
           </button>
           <h2>Businesses</h2>
@@ -279,10 +265,6 @@ const handleIconSelect = (iconName) => {
                 ))}
               </div>
             </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 2ea8f393f526abcc7c236a56b966d6317c504089
           ) : (
             <p>No businesses found.</p>
           )}
@@ -290,58 +272,6 @@ const handleIconSelect = (iconName) => {
         {showAddCategoryForm && (
           <div className="add-category-form-overlay">
             <div className="add-category-form-container">
-<<<<<<< HEAD
-              <h2>Add Category</h2>
-              <form className="add-category-form" onSubmit={handleSubmit}>
-                <label htmlFor="newCategoryName">Category Name:</label>
-                <input
-                  type="text"
-                  id="newCategoryName"
-                  name="name"
-                  preValue={category.name}
-                  onChange={(e) => handleChange(e.target)}
-                  required
-                />
-                <label htmlFor="newCategoryDescription">Category Description:</label>
-                <input
-                  type="text"
-                  name="description"
-                  id="newCategoryDescription"
-                  preValue={category.description}
-                  onChange={(e) => handleChange(e.target)}
-                />
-
-                <label htmlFor="newCategoryIcon">Category Icon:</label>
-                <input
-                  type="text"
-                  placeholder="Search icons..."
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-                <div className="icon-list">
-                  {filteredIcons.map((iconName) => (
-                    <div
-                      key={iconName}
-                      className="icon-item"
-                      name="icon"
-                      value={iconName}
-                      onClick={(e) => {
-
-                        //  onSelect(iconName)
-                        handleChange(e.target)
-                      }
-                      }
-                    >
-                      <span><FontAwesomeIcon icon={['fas', "faBuilding"]} /></span>
-                      {/* <span><FontAwesomeIcon icon={['far', iconName]} /></span>
-                      <span><FontAwesomeIcon icon={['fab', iconName]} /></span> */}
-
-
-                      {/* <span>{iconName}</span> */}
-                    </div>
-                  ))}
-                </div>
-
-=======
               <button
                 type="button"
                 className="cancel"
@@ -404,7 +334,6 @@ const handleIconSelect = (iconName) => {
                     </div>
                   )}
                 </div>
->>>>>>> 2ea8f393f526abcc7c236a56b966d6317c504089
                 <div className="add-category-form-buttons">
                   <button type="submit">Add</button>
                   <button type="button" onClick={handleAddCategoryFormClose}>
