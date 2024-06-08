@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link , useLocation, useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import api from "../util/Util"
 import {
   faBell,
   faCheck,
@@ -16,13 +17,31 @@ import {
   faBuilding,
   faEnvelope,
   faPhone,
+  faPerson,
 } from "@fortawesome/free-solid-svg-icons";
 
 import img from "../images/logo-removebg.png";
 
 const NotificationDetail = () => {
-  const { id } = useParams(); // Assuming the notification ID is passed via URL params
-  const [notificationDetail, setNotificationDetail] = useState(null);
+   // Assuming the notification ID is passed via URL params
+  
+  const [isReport,setIsReport]=useState(false)
+  const [businessId,setBusinessId]=useState('')
+  const [reportId,setReportId]=useState('')
+  const [userId,setUserId]=useState('')
+  const [businessOwnerId,setBusinessOwnerId]=useState('')
+  const [notification,setNotification]=useState({})
+  const {state}=useLocation()
+  const navigate=useNavigate()  
+  const [notificationDetail, setNotificationDetail] = useState(notification);
+
+
+  
+
+  
+
+
+
 
   const dummyData = {
     1: {
@@ -53,23 +72,94 @@ const NotificationDetail = () => {
     },
   };
 
+  const getNotifDetails=async()=>{
+    setNotificationDetail(notification)
+
+    if (!state || !state.notification) {
+      console.log('i am waiting')
+    } else {
+      setNotification(state.notification);
+    if(notification){
+      console.log('this is notification ',notification)
+      
+
+    if(notification.notif_type==="New Report"){
+      setIsReport(true)
+      setReportId(notification._id)
+      setUserId(notification.user) 
+
+    }else{
+      setBusinessId(notification._id)
+      setBusinessOwnerId(notification.business_owner)
+       
+
+    }
+
+  }}}
+
   useEffect(() => {
-    // Simulate fetching data from an API
-    const fetchNotificationDetail = () => {
-      setNotificationDetail(dummyData[id]);
-    };
+    setNotificationDetail(notification);
+    getNotifDetails()
+ 
+  }, [notification]);
 
-    fetchNotificationDetail();
-  }, [id]);
 
-  const handleVerifyBusiness = () => {
-    // Add your logic to verify the business
-    console.log("Business verified");
+
+
+
+
+
+  const handleConfirmFix= async() => {
+    await api.post(`report/confirm-fix`,{reportId,businessOwnerId})
+    .then((res)=>{
+      const data=res.data
+      alert(data.message)
+    })
+    .catch((error)=>{
+      if(error){
+        console.log('this si the error in confirm fix: ',error.message)
+      }
+    })
   };
 
-  const handleDeleteBusiness = () => {
-    // Add your logic to delete the business
-    console.log("Business deleted");
+
+  const handleDeleteReport = async() => {
+    await api.delete(`report/delete-report`,{reportId,userId})
+    .then((res)=>{
+      const data=res.data
+      alert(data.message)
+    })
+    .catch((error)=>{
+      if(error){
+        console.log('this si the error in delete report: ',error.message)
+      }
+    })
+  };
+
+  const handleVerifyBusiness = async() => {
+    await api.post(`business/verify-business`,{businessId,businessOwnerId})
+    .then((res)=>{
+      const data=res.data
+      alert(data.message)
+    })
+    .catch((error)=>{
+      if(error){
+        console.log('this si the error in verify business: ',error.message)
+      }
+    })
+  };
+
+  const handleDeleteBusiness = async() => {
+    await api.delete(`business/delete-business`,{businessId,businessOwnerId})
+    .then((res)=>{
+      const data=res.data
+      alert(data.message)
+    })
+    .catch((error)=>{
+      if(error){
+        console.log('this si the error in delete business: ',error.message)
+      }
+    })
   };
 
   if (!notificationDetail) {
@@ -152,57 +242,113 @@ const NotificationDetail = () => {
             <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
             <h1 className="font-bold text-2xl">Notification Detail</h1>
           </div>
+          {!isReport && 
           <div className="notification-detail bg-white p-4 rounded-lg shadow">
-            <h2 className="font-bold text-xl text-orange-500">
-              {notificationDetail.title}
-            </h2>
-            <p className="mt-2">{notificationDetail.description}</p>
-            <p className="text-gray-500">{notificationDetail.date}</p>
-            <div className="business-details mt-4 p-8">
-              <h3 className="font-bold text-xl">Business Details</h3>
-              <p className=" mt-3 p-2">
-                <FontAwesomeIcon icon={faBuilding} />{" "}
-                <strong className="ml-2">Name:</strong>{" "}
-                {notificationDetail.business.name}
-              </p>
-              <p className=" mt-3 p-2">
-                <FontAwesomeIcon icon={faBuilding} />{" "}
-                <strong className="ml-2">Address:</strong>{" "}
-                {notificationDetail.business.address}
-              </p>
-              <p className=" mt-3 p-2">
-                <FontAwesomeIcon icon={faEnvelope} />{" "}
-                <strong className="ml-2">Email:</strong>{" "}
-                {notificationDetail.business.email}
-              </p>
-              <p className=" mt-3 p-2">
-                <FontAwesomeIcon icon={faPhone} />{" "}
-                <strong className=" ml-2">Phone:</strong>{" "}
-                {notificationDetail.business.phone}
-              </p>
-              <p className=" mt-3 p-2">
-                <FontAwesomeIcon icon={faUser} />{" "}
-                <strong className="ml-2">Registered By:</strong>{" "}
-                {notificationDetail.business.registeredBy}
-              </p>
-            </div>
-            <div className="actions mt-4 flex">
-              <button
-                className="btn-verify mr-2 p-2 bg-green-500 text-white rounded"
-                onClick={handleVerifyBusiness}
-              >
-                <FontAwesomeIcon icon={faCheck} className="mr-1" /> Verify
-                Business
-              </button>
-              <button
-                className="btn-delete p-2 bg-red-500 text-white rounded"
-                onClick={handleDeleteBusiness}
-              >
-                <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
-                Business
-              </button>
-            </div>
+          <h2 className="font-bold text-xl text-orange-500">
+            {notificationDetail.notif_type}
+          </h2>
+          <p className="mt-2">{notificationDetail.description}</p>
+          <p className="text-gray-500">{notificationDetail.date}</p>
+          <div className="business-details mt-4 p-8">
+            <h3 className="font-bold text-xl">Business Details</h3>
+            <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faBuilding} />{" "}
+              <strong className="ml-2">Name:</strong>{" "}
+              {notificationDetail.business_name}
+            </p>
+            <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faBuilding} />{" "}
+              <strong className="ml-2">Address:</strong>{" "}
+              {notificationDetail.address}
+            </p>
+            <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faEnvelope} />{" "}
+              <strong className="ml-2">Email:</strong>{" "}
+              {notificationDetail.email}
+            </p>
+            <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faPhone} />{" "}
+              <strong className=" ml-2">Phone:</strong>{" "}
+              {notificationDetail.phone}
+            </p>
+            <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faUser} />{" "}
+              <strong className="ml-2">Registered By:</strong>{" "}
+              {notificationDetail.user}
+            </p>
           </div>
+          <div className="actions mt-4 flex">
+            <button
+              className="btn-verify mr-2 p-2 bg-green-500 text-white rounded"
+              onClick={handleVerifyBusiness}
+            >
+              <FontAwesomeIcon icon={faCheck} className="mr-1" /> Verify
+              Business
+            </button>
+            <button
+              className="btn-delete p-2 bg-red-500 text-white rounded"
+              onClick={handleDeleteBusiness}
+            >
+              <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
+              Business
+            </button>
+          </div>
+        </div>}
+
+
+
+        {isReport && 
+          <div className="notification-detail bg-white p-4 rounded-lg shadow">
+          <h2 className="font-bold text-xl text-orange-500">
+            {notificationDetail.notif_type}
+          </h2>
+          <p className="mt-2">{notificationDetail.description}</p>
+          <p className="text-gray-500">{notificationDetail.date}</p>
+          <div className="business-details mt-4 p-8">
+            <h3 className="font-bold text-xl">Report Details</h3>
+            <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faPerson} />{" "}
+              <strong className="ml-2">Reported By:</strong>{" "}
+              {notificationDetail.name}
+            </p>
+            {/* <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faBuilding} />{" "}
+              <strong className="ml-2">Email Address:</strong>{" "}
+              {notificationDetail.email}
+            </p> */}
+            <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faEnvelope} />{" "}
+              <strong className="ml-2">Email:</strong>{" "}
+              {notificationDetail.email}
+            </p>
+            <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faPhone} />{" "}
+              <strong className=" ml-2">Status:</strong>{" "}
+              {notificationDetail.status}
+            </p>
+            <p className=" mt-3 p-2">
+              <FontAwesomeIcon icon={faUser} />{" "}
+              <strong className="ml-2">Registered By:</strong>{" "}
+              {notificationDetail.user}
+            </p>
+          </div>
+          <div className="actions mt-4 flex">
+            <button
+              className="btn-verify mr-2 p-2 bg-green-500 text-white rounded"
+              onClick={handleConfirmFix}
+            >
+              <FontAwesomeIcon icon={faCheck} className="mr-1" /> Confirm Fix
+            </button>
+            <button
+              className="btn-delete p-2 bg-red-500 text-white rounded"
+              onClick={handleDeleteReport}
+            >
+              <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
+              Report
+            </button>
+          </div>
+        </div>}
+          
         </div>
       </div>
     </div>

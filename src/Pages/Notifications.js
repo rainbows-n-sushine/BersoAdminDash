@@ -26,7 +26,7 @@ const Notifications = () => {
     getNotifications();
  
 
-  },[])
+  },[setNotificationList])
   
 
  
@@ -125,12 +125,44 @@ const Notifications = () => {
 
  
 
-  const handleMarkAsRead = (id) => {
-    const updatedNotifications = notificationList.map((notification) =>
-      notification._id === id
-        ? { ...notification, status: "read" }
-        : notification
+  const handleMarkAsRead = async(notification) => {
+    const updatedNotifications = notificationList.map((notif) =>
+      notif._id === notification._id
+        ? { ...notif, status: "read" }
+        : notif
     );
+
+ 
+
+    if(notification.notif_type==="New Report"){
+      const reportId=notification._id
+      const status= notification.status
+      await api.put('report/update-report-status',{reportId,status})
+      .then((res)=>{
+        console.log(res.data.message)
+      })
+      .catch((error)=>{
+        if(error){
+          console.log(error.message)
+        }
+      })
+      
+    }
+    else if (notification.notif_type==="New Business"){
+      const businessId=notification._id
+      const status= notification.status
+
+      await api.put('business/update-business-status',{businessId,status})
+      .then((res)=>{
+        console.log(res.data.message)
+      })
+      .catch((error)=>{
+        if(error){
+          console.log(error.message)
+        }
+      })
+    }
+
     setNotificationList(updatedNotifications);
   };
 
@@ -215,7 +247,12 @@ const Notifications = () => {
           <div className="notifications-list mt-4">
             {notificationList.map((notification) => (
               <Link
-                to={`/notifications/${notification._id}`}
+                to={{ pathname:`/notifications/${notification._id}`,
+                state: { notification }
+            }}
+
+              
+            
                 // className="btn-view-detail p-2 bg-blue-500 text-white rounded"
               >
                 <div
@@ -240,7 +277,7 @@ const Notifications = () => {
                     {notification.status === "unread"||"pending" && (
                       <button
                         className="btn-mark-read mr-2 p-2 bg-green-500 text-white rounded"
-                        onClick={() => handleMarkAsRead(notification._id)}
+                        onClick={() => handleMarkAsRead(notification)}
                       >
                         <FontAwesomeIcon icon={faCheck} className="mr-1" /> Mark
                         as Read
@@ -249,7 +286,7 @@ const Notifications = () => {
 
                     <button
                       className="btn-delete p-2 bg-red-500 text-white rounded"
-                      onClick={() => handleDelete(notification._id)}
+                      onClick={() => handleDelete(notification)}
                     >
                       <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
                     </button>
