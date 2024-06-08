@@ -251,12 +251,12 @@ const BusinessListing = () => {
             </ul>
           </div>
         </div>
-        <div className="content-right flex flex-col flex-1 p-2 bg-orange-50 ">
-          <div className="flex m-4 ml-5 items-center h-48">
+        <div className="dashboard-content-right flex flex-col flex-1 p-4  bg-orange-50">
+          <div className=" flex m-4  ml-5 items-center">
             <FontAwesomeIcon icon={faLayerGroup} className="text-xl mr-3" />
             <h1 className="text-2xl font-bold">Businesses and Catagories</h1>
           </div>
-          <div className="flex ">
+          <div className="flex mt-4">
             <div className="w-full md:w-2/12 p-4 bg-orange-100">
               <h2 className="text-xl font-semibold mb-4">Categories</h2>
               <ul>
