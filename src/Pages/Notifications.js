@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import {
@@ -13,35 +13,93 @@ import {
   faSignOutAlt,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import api from "../util/Util";
 
 import img from "../images/logo-removebg.png";
 
 const Notifications = () => {
-  const notifications = [
-    {
-      id: 1,
-      title: "New Business Registered",
-      description: "Business XYZ has registered on the platform.",
-      date: "2024-06-01",
-      status: "unread",
-    },
-    {
-      id: 2,
-      title: "New Report",
-      description: "A new report has been submitted.",
-      date: "2024-06-02",
-      status: "unread",
-    },
-    {
-      id: 3,
-      title: "New User Registered",
-      description: "User ABC has registered on the platform.",
-      date: "2024-06-03",
-      status: "unread",
-    },
-  ];
+  const [businesses,setBusinesses]=useState([])
+  const [reports,setReports]=useState([])
+  const [notifications,setNotifications]=useState([businesses,reports])
+  const [notificationList, setNotificationList] = useState([]);
+  useEffect(()=>{
+  getNotifications();
+  mapNotifications();
 
-  const [notificationList, setNotificationList] = useState(notifications);
+  },[])
+
+  const mapNotifications=()=>{
+    let fetchedNotifications=[]
+    notifications.map((notifs)=>{
+      notifs.map((notif)=>{
+        fetchedNotifications.push(notif)        
+      })      
+    })
+    setNotificationList(fetchedNotifications)
+  }
+
+  const getNotifications=()=>{
+    fetchNewBusinesses();
+    fetchNewReports();
+
+  }
+  
+
+  const fetchNewReports=async()=>{
+    await api.get('report/fetch-new-reports')
+    .then((res)=>{
+      console.log(res.data.message)
+      if(res.data.success){
+        setReports(res.data.reports)
+      }
+    })
+    .catch((error)=>{
+      if(error){
+        console.log('error in fetch new reports: ',error.message)
+      }
+    })
+
+  }
+
+
+
+
+  const fetchNewBusinesses=async()=>{
+    await api.get('business/fetch-new-businesses')
+    .then((res)=>{
+      console.log(res.data.message)
+      if(res.data.success){
+        setBusinesses(res.data.businesses)
+      }
+    })
+    .catch((error)=>{
+      if(error){
+        console.log('error in fetch new businesses: ',error.message)
+      }
+    })
+
+  }
+
+
+  // const notifications = [
+  //   {
+  //     id: 1,
+  //     title: "New Business Registered",
+  //     description: "Business XYZ has registered on the platform.",
+  //     date: "2024-06-01",
+  //     status: "unread",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "New Report",
+  //     description: "A new report has been submitted.",
+  //     date: "2024-06-02",
+  //     status: "unread",
+  //   },
+
+  // ];
+
+ 
 
   const handleMarkAsRead = (id) => {
     const updatedNotifications = notificationList.map((notification) =>
