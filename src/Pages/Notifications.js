@@ -20,27 +20,28 @@ import img from "../images/logo-removebg.png";
 const Notifications = () => {
   const [businesses,setBusinesses]=useState([])
   const [reports,setReports]=useState([])
-  const [notifications,setNotifications]=useState([businesses,reports])
+  const [notifications,setNotifications]=useState([])
   const [notificationList, setNotificationList] = useState([]);
   useEffect(()=>{
-  getNotifications();
-  mapNotifications();
+    getNotifications();
+ 
 
   },[])
+  useEffect(()=>{
+    mapNotifications();
+  },[businesses,reports])
 
-  const mapNotifications=()=>{
-    let fetchedNotifications=[]
-    notifications.map((notifs)=>{
-      notifs.map((notif)=>{
-        fetchedNotifications.push(notif)        
-      })      
-    })
-    setNotificationList(fetchedNotifications)
-  }
 
-  const getNotifications=()=>{
-    fetchNewBusinesses();
-    fetchNewReports();
+
+
+//  if(reports.length!==0||businesses.length!==0){
+//   mapNotifications()
+//  }
+
+ 
+  const getNotifications=async()=>{
+    await fetchNewBusinesses();
+    await fetchNewReports();
 
   }
   
@@ -50,7 +51,9 @@ const Notifications = () => {
     .then((res)=>{
       console.log(res.data.message)
       if(res.data.success){
+        console.log('these r the new reports fetched: ',res.data.reports)
         setReports(res.data.reports)
+        setNotifications((prevArray)=>[...prevArray,res.data.reports])
       }
     })
     .catch((error)=>{
@@ -69,7 +72,10 @@ const Notifications = () => {
     .then((res)=>{
       console.log(res.data.message)
       if(res.data.success){
+        console.log('these r the new businesses fetched: ',res.data.businesses)
         setBusinesses(res.data.businesses)
+        setNotifications((prevArray)=>[...prevArray,res.data.businesses])
+        
       }
     })
     .catch((error)=>{
@@ -79,6 +85,23 @@ const Notifications = () => {
     })
 
   }
+
+  const mapNotifications=()=>{
+    
+
+    console.log('im in map notifications')
+    console.log(reports,businesses)
+    let fetchedNotifications=[]
+    notifications.map((notifs)=>{
+      console.log("this is noti")
+      notifs.map((notif)=>{
+        fetchedNotifications.push(notif)        
+      })      
+    })
+    setNotificationList(fetchedNotifications)
+  }
+  
+
 
 
   // const notifications = [
@@ -191,16 +214,16 @@ const Notifications = () => {
           <div className="notifications-list mt-4">
             {notificationList.map((notification) => (
               <Link
-                to={`/notifications/${notification.id}`}
+                to={`/notifications/${notification._id}`}
                 // className="btn-view-detail p-2 bg-blue-500 text-white rounded"
               >
                 <div
-                  key={notification.id}
+                  key={notification._id}
                   className="notification-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between"
                 >
                   <div className="flex-col">
                     <h2 className="font-bold text-xl text-orange-500">
-                      {notification.title}
+                      {notification.notif_type}
                     </h2>
                     <p>{notification.description}</p>
                     <p className="text-gray-500">{notification.date}</p>
@@ -213,10 +236,10 @@ const Notifications = () => {
                     </p>
                   </div>
                   <div className="actions mt-2 flex">
-                    {notification.status === "unread" && (
+                    {notification.status === "unread"||"pending" && (
                       <button
                         className="btn-mark-read mr-2 p-2 bg-green-500 text-white rounded"
-                        onClick={() => handleMarkAsRead(notification.id)}
+                        onClick={() => handleMarkAsRead(notification._id)}
                       >
                         <FontAwesomeIcon icon={faCheck} className="mr-1" /> Mark
                         as Read
@@ -225,7 +248,7 @@ const Notifications = () => {
 
                     <button
                       className="btn-delete p-2 bg-red-500 text-white rounded"
-                      onClick={() => handleDelete(notification.id)}
+                      onClick={() => handleDelete(notification._id)}
                     >
                       <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
                     </button>
