@@ -6,6 +6,8 @@ import AdminDashboard from './Pages/AdminDashboard';
 import BusinessListing from './Pages/BusinessListing';
 import ProblemReports from './Pages/ProblemReports';
 import ReportDetail from './Pages/ReportDetail';
+import Notifications from './Pages/Notifications';
+import Settings from './Pages/Settings';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path="/BusinessListing" element={<BusinessListing />} />
         <Route path="/ProblemReports" element={<ProblemReports />} />
         <Route path="/ReportDetail/:id" element={<ReportDetail />} />
+        <Route path="/Notifications" element={<Notifications />} />
+        <Route path="/settings" element={<Settings/>} />
       </Routes>
     </BrowserRouter>
   );

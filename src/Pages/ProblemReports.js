@@ -102,14 +102,17 @@ const ProblemReports = () => {
           />
         </div>
         <div className="top-bar-icons flex items-center justify-between w-60">
-          <FontAwesomeIcon icon={faBell} className="text-lg " />
+          <Link to="/Notifications">
+            <FontAwesomeIcon icon={faBell} className="text-lg " />
+          </Link>{" "}
           <FontAwesomeIcon icon={faUser} className="text-lg " />
           <FontAwesomeIcon icon={faSignOutAlt} className="text-lg" />
         </div>
       </div>
       <div className="dashboard-content flex flex-1">
         <div className="sidebar w-72 p-4 shadow">
-          <div className="side-menu justify-between">
+          <div className="side-menu">
+            {" "}
             <h2 className="text-2xl font-bold my-5">Menu</h2>
             <ul>
               <li className="mb-4">

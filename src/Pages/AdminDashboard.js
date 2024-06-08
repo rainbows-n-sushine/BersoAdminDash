@@ -83,14 +83,17 @@ const AdminDashboard = () => {
           />
         </div>
         <div className="top-bar-icons flex items-center justify-between w-60">
-          <FontAwesomeIcon icon={faBell} className="text-lg " />
+          <Link to="/Notifications">
+            <FontAwesomeIcon icon={faBell} className="text-lg " />
+          </Link>
           <FontAwesomeIcon icon={faUser} className="text-lg " />
           <FontAwesomeIcon icon={faSignOutAlt} className="text-lg" />
         </div>
       </div>
       <div className="dashboard-content flex flex-1">
-        <div className="sidebar w-72 p-4 shadow flex">
-          <div className="side-menu justify-between">
+        <div className="sidebar w-72 p-4 shadow">
+          <div className="side-menu">
+            {" "}
             <h2 className="text-2xl font-bold my-5">Menu</h2>
             <ul>
               <li className="mb-4">
@@ -139,7 +142,7 @@ const AdminDashboard = () => {
             </ul>
           </div>
         </div>
-        <div className="dashboard-content-right flex flex-col flex-1 p-4  bg-orange-50">
+        <div className="dashboard-content-right flex flex-col flex-1 p-4 bg-orange-50">
           <div className=" flex m-4  ml-5 items-center">
             <FontAwesomeIcon icon={faHome} className="text-xl mr-3 " />
             <h1 className="font-bold text-2xl">Admin's Dashboard</h1>
@@ -177,7 +180,7 @@ const AdminDashboard = () => {
               <div className="count text-3xl text-center">20+</div>
             </div>
           </div>
-          <div className=" bg-white p-2 rounded-lg shadow ml-3">
+          <div className=" bg-white p-2 rounded-lg shadow ml-6">
             <CanvasJSChart
               options={options}
               onRef={(ref) => (chartRef.current = ref)}
