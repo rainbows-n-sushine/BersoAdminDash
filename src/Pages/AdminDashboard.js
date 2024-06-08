@@ -24,46 +24,65 @@ const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const AdminDashboard = () => {
   const chartRef = useRef(null);
 
-  useEffect(() => {
-    if (chartRef.current) {
-      chartRef.current.render();
-    }
-  }, []);
+ const [categoriesCount, setCategoriesCount] = useState(0);
+ const [listingsCount, setListingsCount] = useState(0);
+ const [claimedListingsCount, setClaimedListingsCount] = useState(0);
+ const [monthlyUsersData, setMonthlyUsersData] = useState([]);
 
-  const options = {
-    animationEnabled: true,
-    title: {
-      text: "Monthly Users - 2024",
-    },
-    axisX: {
-      valueFormatString: "MMM",
-    },
-    axisY: {
-      title: "Number of users",
-      prefix: "",
-    },
-    data: [
-      {
-        yValueFormatString: "#,###",
-        xValueFormatString: "MMMM",
-        type: "spline",
-        dataPoints: [
-          { x: new Date(2017, 0), y: 25060 },
-          { x: new Date(2017, 1), y: 27980 },
-          { x: new Date(2017, 2), y: 42800 },
-          { x: new Date(2017, 3), y: 32400 },
-          { x: new Date(2017, 4), y: 35260 },
-          { x: new Date(2017, 5), y: 33900 },
-          { x: new Date(2017, 6), y: 40000 },
-          { x: new Date(2017, 7), y: 52500 },
-          { x: new Date(2017, 8), y: 32300 },
-          { x: new Date(2017, 9), y: 42000 },
-          { x: new Date(2017, 10), y: 37160 },
-          { x: new Date(2017, 11), y: 38400 },
-        ],
-      },
-    ],
-  };
+ useEffect(() => {
+   async function fetchData() {
+     try {
+       const categoriesRes = await fetch("/category/fetchAll");
+       const categoriesData = await categoriesRes.json();
+
+       const listingsRes = await fetch("/business/fetch-all");
+       const listingsData = await listingsRes.json();
+
+       const claimedListingsRes = await fetch("/business/fetch-claimed"); // Assuming this endpoint exists
+       const claimedListingsData = await claimedListingsRes.json();
+
+       const monthlyUsersRes = await fetch("/api/users/monthly"); // Assuming this endpoint exists
+       const monthlyUsersData = await monthlyUsersRes.json();
+
+       setCategoriesCount(categoriesData.categories.length);
+       setListingsCount(listingsData.businesses.length);
+       setClaimedListingsCount(claimedListingsData.claimed.length); // Assuming the response contains a `claimed` array
+       setMonthlyUsersData(monthlyUsersData.dataPoints); // Adjust according to actual data structure
+     } catch (error) {
+       console.error("Error fetching data", error);
+     }
+   }
+
+   fetchData();
+ }, []);
+
+ useEffect(() => {
+   if (chartRef.current) {
+     chartRef.current.render();
+   }
+ }, [monthlyUsersData]);
+
+ const options = {
+   animationEnabled: true,
+   title: {
+     text: "Monthly Users - 2024",
+   },
+   axisX: {
+     valueFormatString: "MMM",
+   },
+   axisY: {
+     title: "Number of users",
+     prefix: "",
+   },
+   data: [
+     {
+       yValueFormatString: "#,###",
+       xValueFormatString: "MMMM",
+       type: "spline",
+       dataPoints: monthlyUsersData,
+     },
+   ],
+ };
 
   return (
     <div className="admin-dashboard flex flex-col h-screen">
@@ -153,21 +172,23 @@ const AdminDashboard = () => {
                 icon={faLayerGroup}
                 size={40}
                 className="text-3xl mt-10 items-center mx-44 mb-2"
-              />{" "}
-              <h2 className="text-xl font-bold  mb-2 text-center">
+              />
+              <h2 className="text-xl font-bold mb-2 text-center">
                 Total Categories
               </h2>
-              <div className="count text-3xl text-center">50+</div>
+              <div className="count text-3xl text-center">
+                {categoriesCount}
+              </div>
             </div>
             <div className="card w-1/3 bg-white p-4 m-3 rounded-xl shadow">
               <FontAwesomeIcon
                 icon={faStore}
                 className="text-3xl mt-10 mb-2 items-center mx-44"
-              />{" "}
-              <h2 className="text-xl font-bold  mb-2 text-center">
+              />
+              <h2 className="text-xl font-bold mb-2 text-center">
                 Total Listings
               </h2>
-              <div className="count text-3xl text-center">100+</div>
+              <div className="count text-3xl text-center">{listingsCount}</div>
             </div>
             <div className="card w-1/3 bg-white p-4 m-3 rounded-xl shadow">
               <FontAwesomeIcon
@@ -177,10 +198,12 @@ const AdminDashboard = () => {
               <h2 className="text-xl font-bold mb-2 text-center">
                 Claimed Listings
               </h2>
-              <div className="count text-3xl text-center">20+</div>
+              <div className="count text-3xl text-center">
+                {claimedListingsCount}
+              </div>
             </div>
           </div>
-          <div className=" bg-white p-2 rounded-lg shadow ml-6">
+          <div className="bg-white p-2 rounded-lg shadow ml-6">
             <CanvasJSChart
               options={options}
               onRef={(ref) => (chartRef.current = ref)}
