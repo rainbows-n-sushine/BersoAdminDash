@@ -170,13 +170,13 @@ const Notifications = () => {
                   to="/ProblemReports"
                   className="flex items-center text-xl"
                 >
-                  <FontAwesomeIcon icon={faChartBar} className="text-xl mr-3" />
+                  <FontAwesomeIcon icon={faChartBar} className="text-xl mr-3" />{" "}
                   Problem Reports
                 </Link>
               </li>
               <li className="mb-4">
                 <Link to="/settings" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />
+                  <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />{" "}
                   Settings
                 </Link>
               </li>
@@ -190,42 +190,49 @@ const Notifications = () => {
           </div>
           <div className="notifications-list mt-4">
             {notificationList.map((notification) => (
-              <div
-                key={notification.id}
-                className="notification-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between"
+              <Link
+                to={`/notifications/${notification.id}`}
+                // className="btn-view-detail p-2 bg-blue-500 text-white rounded"
               >
-                <div className="flex-col">
-                  <h2 className="font-bold text-xl text-orange-500">
-                    {notification.title}
-                  </h2>
-                  <p>{notification.description}</p>
-                  <p className="text-gray-500">{notification.date}</p>
-                  <p
-                    className={`status text-${
-                      notification.status === "read" ? "green" : "red"
-                    }-500 font-bold`}
-                  >
-                    {notification.status === "read" ? "Read" : "Unread"}
-                  </p>
-                </div>
-                <div className="actions mt-2 flex">
-                  {notification.status === "unread" && (
-                    <button
-                      className="btn-mark-read mr-2 p-2 bg-green-500 text-white rounded"
-                      onClick={() => handleMarkAsRead(notification.id)}
+                <div
+                  key={notification.id}
+                  className="notification-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between"
+                >
+                  <div className="flex-col">
+                    <h2 className="font-bold text-xl text-orange-500">
+                      {notification.title}
+                    </h2>
+                    <p>{notification.description}</p>
+                    <p className="text-gray-500">{notification.date}</p>
+                    <p
+                      className={`status text-${
+                        notification.status === "read" ? "green" : "red"
+                      }-500 font-bold`}
                     >
-                      <FontAwesomeIcon icon={faCheck} className="mr-1" /> Mark
-                      as Read
+                      {notification.status === "read" ? "Read" : "Unread"}
+                    </p>
+                  </div>
+                  <div className="actions mt-2 flex">
+                    {notification.status === "unread" && (
+                      <button
+                        className="btn-mark-read mr-2 p-2 bg-green-500 text-white rounded"
+                        onClick={() => handleMarkAsRead(notification.id)}
+                      >
+                        <FontAwesomeIcon icon={faCheck} className="mr-1" /> Mark
+                        as Read
+                      </button>
+                    )}
+
+                    <button
+                      className="btn-delete p-2 bg-red-500 text-white rounded"
+                      onClick={() => handleDelete(notification.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
                     </button>
-                  )}
-                  <button
-                    className="btn-delete p-2 bg-red-500 text-white rounded"
-                    onClick={() => handleDelete(notification.id)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
-                  </button>
+                  </div>
                 </div>
-              </div>
+                
+              </Link>
             ))}
             {notificationList.length === 0 && (
               <p className="text-center mt-4">No notifications found.</p>
