@@ -8,6 +8,7 @@ import ProblemReports from './Pages/ProblemReports';
 import ReportDetail from './Pages/ReportDetail';
 import Notifications from './Pages/Notifications';
 import Settings from './Pages/Settings';
+import NotificationDetail from './Pages/NotificationDetail';
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
         <Route path="/ProblemReports" element={<ProblemReports />} />
         <Route path="/ReportDetail/:id" element={<ReportDetail />} />
         <Route path="/Notifications" element={<Notifications />} />
-        <Route path="/settings" element={<Settings/>} />
+        <Route path="/notifications/:id" element={<NotificationDetail />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </BrowserRouter>
   );

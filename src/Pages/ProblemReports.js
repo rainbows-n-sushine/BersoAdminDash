@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import {
@@ -18,9 +18,11 @@ import {
   faArrowLeft,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import api from "../util/Util";
 
 import img from "../images/logo-removebg.png";
 const ProblemReports = () => {
+
   const reports = [
     {
       id: 1,
@@ -57,10 +59,33 @@ const ProblemReports = () => {
       type: "Business Issue",
     },
   ];
+  
+  const [reportList, setReportList] = useState([]);
+  const [filter, setFilter] = useState("All");
+
+  useEffect(()=>{
+    fetchReports();
+  },[])
+  const fetchReports=async()=>{
+
+    await api.get('report/fetch-all')
+    .then((res)=>{
+      console.log(res.data.message)
+      if(res.data.success){
+        setReportList(res.data.reports)
+      }
+    })
+    .catch((error)=>{
+      if(error){
+        console.log("this is the error in fetch reports: ",error.message)
+      }
+    })
+  }
 
 
- const [reportList, setReportList] = useState(reports);
- const [filter, setFilter] = useState("All");
+
+
+
 
  const handleResolve = (id) => {
    const updatedReports = reportList.map((report) =>
@@ -196,7 +221,7 @@ const ProblemReports = () => {
           <div className="reports-list mt-4">
             {filteredReports.map((report) => (
               <div
-                key={report.id}
+                key={report._id}
                 className="report-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between "
               >
                 <div className="flex-col">
