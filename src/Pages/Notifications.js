@@ -27,16 +27,7 @@ const Notifications = () => {
  
 
   },[])
-  useEffect(()=>{
-    mapNotifications();
-  },[businesses,reports])
-
-
-
-
-//  if(reports.length!==0||businesses.length!==0){
-//   mapNotifications()
-//  }
+  
 
  
   const getNotifications=async()=>{
@@ -63,6 +54,13 @@ const Notifications = () => {
     })
 
   }
+
+
+  useEffect(()=>{
+    mapNotifications();
+  },[reports])
+
+
 
 
 
@@ -92,12 +90,15 @@ const Notifications = () => {
     console.log('im in map notifications')
     console.log(reports,businesses)
     let fetchedNotifications=[]
+    console.log('these are notifications', notifications)
     notifications.map((notifs)=>{
       console.log("this is noti")
       notifs.map((notif)=>{
         fetchedNotifications.push(notif)        
       })      
     })
+    console.log("these r fetched notifications ",fetchedNotifications)
+    // setNotifications(fetchedNotifications)
     setNotificationList(fetchedNotifications)
   }
   
@@ -126,7 +127,7 @@ const Notifications = () => {
 
   const handleMarkAsRead = (id) => {
     const updatedNotifications = notificationList.map((notification) =>
-      notification.id === id
+      notification._id === id
         ? { ...notification, status: "read" }
         : notification
     );
