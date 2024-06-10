@@ -225,7 +225,7 @@ const ProblemReports = () => {
                 className="report-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between "
               >
                 <div className="flex-col">
-                  <h2 className="font-bold">
+                  <h2 className="font-bold text-orange-500">
                     <Link
                       to="/ReportDetail/:id"
                       className="text-orange-500 font-bold text-xl"
