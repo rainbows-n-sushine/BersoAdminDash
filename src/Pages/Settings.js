@@ -148,7 +148,7 @@ const Settings = () => {
             </div>
             <div className="flex justify-end mt-20">
               <button
-                className="btn-save p-2 bg-green-500 text-white rounded"
+                className="btn-save p-2 bg-orange-500 text-white rounded"
                 onClick={handleSave}
               >
                 <FontAwesomeIcon icon={faSave} className="mr-1" /> Save Settings

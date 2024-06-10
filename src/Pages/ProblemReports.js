@@ -178,6 +178,12 @@ const ProblemReports = () => {
                 </Link>
               </li>
               <li className="mb-4">
+                <Link to="/Notifications" className="flex items-center text-xl">
+                  <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
+                  Notifications
+                </Link>
+              </li>
+              <li className="mb-4">
                 <Link to="/settings" className="flex items-center text-xl">
                   <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />{" "}
                   Settings

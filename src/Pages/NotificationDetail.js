@@ -223,6 +223,12 @@ const NotificationDetail = () => {
                 </Link>
               </li>
               <li className="mb-4">
+                <Link to="/Notifications" className="flex items-center text-xl">
+                  <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
+                  Notifications
+                </Link>
+              </li>
+              <li className="mb-4">
                 <Link to="/settings" className="flex items-center text-xl">
                   <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />
                   Settings
@@ -242,113 +248,113 @@ const NotificationDetail = () => {
             <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
             <h1 className="font-bold text-2xl">Notification Detail</h1>
           </div>
-          {!isReport && 
-          <div className="notification-detail bg-white p-4 rounded-lg shadow">
-          <h2 className="font-bold text-xl text-orange-500">
-            {notificationDetail.notif_type}
-          </h2>
-          <p className="mt-2">{notificationDetail.description}</p>
-          <p className="text-gray-500">{notificationDetail.date}</p>
-          <div className="business-details mt-4 p-8">
-            <h3 className="font-bold text-xl">Business Details</h3>
-            <p className=" mt-3 p-2">
-              <FontAwesomeIcon icon={faBuilding} />{" "}
-              <strong className="ml-2">Name:</strong>{" "}
-              {notificationDetail.business_name}
-            </p>
-            <p className=" mt-3 p-2">
-              <FontAwesomeIcon icon={faBuilding} />{" "}
-              <strong className="ml-2">Address:</strong>{" "}
-              {notificationDetail.address}
-            </p>
-            <p className=" mt-3 p-2">
-              <FontAwesomeIcon icon={faEnvelope} />{" "}
-              <strong className="ml-2">Email:</strong>{" "}
-              {notificationDetail.email}
-            </p>
-            <p className=" mt-3 p-2">
-              <FontAwesomeIcon icon={faPhone} />{" "}
-              <strong className=" ml-2">Phone:</strong>{" "}
-              {notificationDetail.phone}
-            </p>
-            <p className=" mt-3 p-2">
-              <FontAwesomeIcon icon={faUser} />{" "}
-              <strong className="ml-2">Registered By:</strong>{" "}
-              {notificationDetail.user}
-            </p>
-          </div>
-          <div className="actions mt-4 flex">
-            <button
-              className="btn-verify mr-2 p-2 bg-green-500 text-white rounded"
-              onClick={handleVerifyBusiness}
-            >
-              <FontAwesomeIcon icon={faCheck} className="mr-1" /> Verify
-              Business
-            </button>
-            <button
-              className="btn-delete p-2 bg-red-500 text-white rounded"
-              onClick={handleDeleteBusiness}
-            >
-              <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
-              Business
-            </button>
-          </div>
-        </div>}
+          {!isReport && (
+            <div className="notification-detail bg-white p-4 rounded-lg shadow">
+              <h2 className="font-bold text-xl text-orange-500">
+                {notificationDetail.notif_type}
+              </h2>
+              <p className="mt-2">{notificationDetail.description}</p>
+              <p className="text-gray-500">{notificationDetail.date}</p>
+              <div className="business-details mt-4 p-8">
+                <h3 className="font-bold text-xl">Business Details</h3>
+                <p className=" mt-3 p-2">
+                  <FontAwesomeIcon icon={faBuilding} />{" "}
+                  <strong className="ml-2">Name:</strong>{" "}
+                  {notificationDetail.business_name}
+                </p>
+                <p className=" mt-3 p-2">
+                  <FontAwesomeIcon icon={faBuilding} />{" "}
+                  <strong className="ml-2">Address:</strong>{" "}
+                  {notificationDetail.address}
+                </p>
+                <p className=" mt-3 p-2">
+                  <FontAwesomeIcon icon={faEnvelope} />{" "}
+                  <strong className="ml-2">Email:</strong>{" "}
+                  {notificationDetail.email}
+                </p>
+                <p className=" mt-3 p-2">
+                  <FontAwesomeIcon icon={faPhone} />{" "}
+                  <strong className=" ml-2">Phone:</strong>{" "}
+                  {notificationDetail.phone}
+                </p>
+                <p className=" mt-3 p-2">
+                  <FontAwesomeIcon icon={faUser} />{" "}
+                  <strong className="ml-2">Registered By:</strong>{" "}
+                  {notificationDetail.user}
+                </p>
+              </div>
+              <div className="actions mt-4 flex">
+                <button
+                  className="btn-verify mr-2 p-2 bg-green-500 text-white rounded"
+                  onClick={handleVerifyBusiness}
+                >
+                  <FontAwesomeIcon icon={faCheck} className="mr-1" /> Verify
+                  Business
+                </button>
+                <button
+                  className="btn-delete p-2 bg-red-500 text-white rounded"
+                  onClick={handleDeleteBusiness}
+                >
+                  <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
+                  Business
+                </button>
+              </div>
+            </div>
+          )}
 
-
-
-        {isReport && 
-          <div className="notification-detail bg-white p-4 rounded-lg shadow">
-          <h2 className="font-bold text-xl text-orange-500">
-            {notificationDetail.notif_type}
-          </h2>
-          <p className="mt-2">{notificationDetail.description}</p>
-          <p className="text-gray-500">{notificationDetail.date}</p>
-          <div className="business-details mt-4 p-8">
-            <h3 className="font-bold text-xl">Report Details</h3>
-            <p className=" mt-3 p-2">
-              <FontAwesomeIcon icon={faPerson} />{" "}
-              <strong className="ml-2">Reported By:</strong>{" "}
-              {notificationDetail.name}
-            </p>
-            {/* <p className=" mt-3 p-2">
+          {isReport && (
+            <div className="notification-detail bg-white p-4 rounded-lg shadow">
+              <h2 className="font-bold text-xl text-orange-500">
+                {notificationDetail.notif_type}
+              </h2>
+              <p className="mt-2">{notificationDetail.description}</p>
+              <p className="text-gray-500">{notificationDetail.date}</p>
+              <div className="business-details mt-4 p-8">
+                <h3 className="font-bold text-xl">Report Details</h3>
+                <p className=" mt-3 p-2">
+                  <FontAwesomeIcon icon={faPerson} />{" "}
+                  <strong className="ml-2">Reported By:</strong>{" "}
+                  {notificationDetail.name}
+                </p>
+                {/* <p className=" mt-3 p-2">
               <FontAwesomeIcon icon={faBuilding} />{" "}
               <strong className="ml-2">Email Address:</strong>{" "}
               {notificationDetail.email}
             </p> */}
-            <p className=" mt-3 p-2">
-              <FontAwesomeIcon icon={faEnvelope} />{" "}
-              <strong className="ml-2">Email:</strong>{" "}
-              {notificationDetail.email}
-            </p>
-            <p className=" mt-3 p-2">
-              <FontAwesomeIcon icon={faPhone} />{" "}
-              <strong className=" ml-2">Status:</strong>{" "}
-              {notificationDetail.status}
-            </p>
-            <p className=" mt-3 p-2">
-              <FontAwesomeIcon icon={faUser} />{" "}
-              <strong className="ml-2">Registered By:</strong>{" "}
-              {notificationDetail.user}
-            </p>
-          </div>
-          <div className="actions mt-4 flex">
-            <button
-              className="btn-verify mr-2 p-2 bg-green-500 text-white rounded"
-              onClick={handleConfirmFix}
-            >
-              <FontAwesomeIcon icon={faCheck} className="mr-1" /> Confirm Fix
-            </button>
-            <button
-              className="btn-delete p-2 bg-red-500 text-white rounded"
-              onClick={handleDeleteReport}
-            >
-              <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
-              Report
-            </button>
-          </div>
-        </div>}
-          
+                <p className=" mt-3 p-2">
+                  <FontAwesomeIcon icon={faEnvelope} />{" "}
+                  <strong className="ml-2">Email:</strong>{" "}
+                  {notificationDetail.email}
+                </p>
+                <p className=" mt-3 p-2">
+                  <FontAwesomeIcon icon={faPhone} />{" "}
+                  <strong className=" ml-2">Status:</strong>{" "}
+                  {notificationDetail.status}
+                </p>
+                <p className=" mt-3 p-2">
+                  <FontAwesomeIcon icon={faUser} />{" "}
+                  <strong className="ml-2">Registered By:</strong>{" "}
+                  {notificationDetail.user}
+                </p>
+              </div>
+              <div className="actions mt-4 flex">
+                <button
+                  className="btn-verify mr-2 p-2 bg-green-500 text-white rounded"
+                  onClick={handleConfirmFix}
+                >
+                  <FontAwesomeIcon icon={faCheck} className="mr-1" /> Confirm
+                  Fix
+                </button>
+                <button
+                  className="btn-delete p-2 bg-red-500 text-white rounded"
+                  onClick={handleDeleteReport}
+                >
+                  <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
+                  Report
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

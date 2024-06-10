@@ -231,6 +231,12 @@ const Notifications = () => {
                 </Link>
               </li>
               <li className="mb-4">
+                <Link to="/Notifications" className="flex items-center text-xl">
+                  <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
+                  Notifications
+                </Link>
+              </li>
+              <li className="mb-4">
                 <Link to="/settings" className="flex items-center text-xl">
                   <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />{" "}
                   Settings
@@ -247,12 +253,11 @@ const Notifications = () => {
           <div className="notifications-list mt-4">
             {notificationList.map((notification) => (
               <Link
-                to={{ pathname:`/notifications/${notification._id}`,
-                state: { notification }
-            }}
+                to={{
+                  pathname: `/notifications/${notification._id}`,
+                  state: { notification },
+                }}
 
-              
-            
                 // className="btn-view-detail p-2 bg-blue-500 text-white rounded"
               >
                 <div
@@ -274,15 +279,16 @@ const Notifications = () => {
                     </p>
                   </div>
                   <div className="actions mt-2 flex">
-                    {notification.status === "unread"||"pending" && (
-                      <button
-                        className="btn-mark-read mr-2 p-2 bg-green-500 text-white rounded"
-                        onClick={() => handleMarkAsRead(notification)}
-                      >
-                        <FontAwesomeIcon icon={faCheck} className="mr-1" /> Mark
-                        as Read
-                      </button>
-                    )}
+                    {notification.status === "unread" ||
+                      ("pending" && (
+                        <button
+                          className="btn-mark-read mr-2 p-2 bg-green-500 text-white rounded"
+                          onClick={() => handleMarkAsRead(notification)}
+                        >
+                          <FontAwesomeIcon icon={faCheck} className="mr-1" />{" "}
+                          Mark as Read
+                        </button>
+                      ))}
 
                     <button
                       className="btn-delete p-2 bg-red-500 text-white rounded"
@@ -292,7 +298,6 @@ const Notifications = () => {
                     </button>
                   </div>
                 </div>
-                
               </Link>
             ))}
             {notificationList.length === 0 && (
