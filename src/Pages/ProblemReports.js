@@ -178,6 +178,12 @@ const ProblemReports = () => {
                 </Link>
               </li>
               <li className="mb-4">
+                <Link to="/Notifications" className="flex items-center text-xl">
+                  <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
+                  Notifications
+                </Link>
+              </li>
+              <li className="mb-4">
                 <Link to="/settings" className="flex items-center text-xl">
                   <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />{" "}
                   Settings
@@ -225,7 +231,7 @@ const ProblemReports = () => {
                 className="report-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between "
               >
                 <div className="flex-col">
-                  <h2 className="font-bold">
+                  <h2 className="font-bold text-orange-500">
                     <Link
                       to="/ReportDetail/:id"
                       className="text-orange-500 font-bold text-xl"

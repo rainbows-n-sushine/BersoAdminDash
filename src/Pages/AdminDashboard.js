@@ -38,15 +38,15 @@ const AdminDashboard = () => {
        const listingsRes = await fetch("/business/fetch-all");
        const listingsData = await listingsRes.json();
 
-       const claimedListingsRes = await fetch("/business/fetch-claimed"); // Assuming this endpoint exists
-       const claimedListingsData = await claimedListingsRes.json();
+      //  const claimedListingsRes = await fetch("/business/fetch-claimed"); // Assuming this endpoint exists
+      //  const claimedListingsData = await claimedListingsRes.json();
 
        const monthlyUsersRes = await fetch("/api/users/monthly"); // Assuming this endpoint exists
        const monthlyUsersData = await monthlyUsersRes.json();
 
        setCategoriesCount(categoriesData.categories.length);
        setListingsCount(listingsData.businesses.length);
-       setClaimedListingsCount(claimedListingsData.claimed.length); // Assuming the response contains a `claimed` array
+      //  setClaimedListingsCount(claimedListingsData.claimed.length); // Assuming the response contains a `claimed` array
        setMonthlyUsersData(monthlyUsersData.dataPoints); // Adjust according to actual data structure
      } catch (error) {
        console.error("Error fetching data", error);
@@ -150,6 +150,12 @@ const AdminDashboard = () => {
                 >
                   <FontAwesomeIcon icon={faChartBar} className="text-xl mr-3" />{" "}
                   Problem Reports
+                </Link>
+              </li>
+              <li className="mb-4">
+                <Link to="/Notifications" className="flex items-center text-xl">
+                  <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
+                  Notifications
                 </Link>
               </li>
               <li className="mb-4">

@@ -243,6 +243,12 @@ const BusinessListing = () => {
                 </Link>
               </li>
               <li className="mb-4">
+                <Link to="/Notifications" className="flex items-center text-xl">
+                  <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
+                  Notifications
+                </Link>
+              </li>
+              <li className="mb-4">
                 <Link to="/settings" className="flex items-center text-xl">
                   <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />{" "}
                   Settings
@@ -251,12 +257,12 @@ const BusinessListing = () => {
             </ul>
           </div>
         </div>
-        <div className="content-right flex flex-col flex-1 p-2 bg-orange-50 ">
-          <div className="flex m-4 ml-5 items-center md:h-1/6">
+        <div className="dashboard-content-right flex flex-col flex-1 p-4  bg-orange-50">
+          <div className=" flex m-4  ml-5 items-center">
             <FontAwesomeIcon icon={faLayerGroup} className="text-xl mr-3" />
             <h1 className="text-2xl font-bold">Businesses and Catagories</h1>
           </div>
-          <div className="flex md:h-5/6">
+          <div className="flex mt-4">
             <div className="w-full md:w-2/12 p-4 bg-orange-100">
               <h2 className="text-xl font-semibold mb-4">Categories</h2>
               <ul>
@@ -273,7 +279,7 @@ const BusinessListing = () => {
                     key={fetchedCategory._id}
                     className={`cursor-pointer p-2 ${
                       selectedCategory === fetchedCategory._id
-                        ? "bg-gray-200"
+                        ? "bg-orange-200"
                         : ""
                     }`}
                     onClick={() => handleCategoryClick(fetchedCategory._id)}
@@ -283,13 +289,13 @@ const BusinessListing = () => {
                 ))}
               </ul>
             </div>
-            <div className="flex-1 p-4 bg-orange-100">
+            <div className="flex-1 p-4 ">
               <div className="mb-4">
                 <button
                   className={`p-2 ${
                     activeTab === "businesses"
-                      ? "bg-orange-300 text-white"
-                      : "bg-white"
+                      ? "bg-orange-300 text-white rounded-lg"
+                      : "bg-white rounded-lg"
                   }`}
                   onClick={() => setActiveTab("businesses")}
                 >
@@ -298,8 +304,8 @@ const BusinessListing = () => {
                 <button
                   className={`p-2 ml-2 ${
                     activeTab === "categories"
-                      ? "bg-orange-300 text-white"
-                      : "bg-white"
+                      ? "bg-orange-300 text-white rounded-lg"
+                      : "bg-white rounded-lg"
                   }`}
                   onClick={() => setActiveTab("categories")}
                 >
@@ -307,19 +313,19 @@ const BusinessListing = () => {
                 </button>
               </div>
               {activeTab === "businesses" && (
-                <div>
+                <div className="">
                   <h2 className="text-xl font-semibold mb-4">Businesses</h2>
                   {filteredBusinesses.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {filteredBusinesses.map((business) => (
                         <div
                           key={business._id}
-                          className="p-4 border rounded-md"
+                          className="p-4 border rounded-xl bg-white flex-row shadow-md"
                         >
-                          <FontAwesomeIcon
+                          {/* <FontAwesomeIcon
                             icon={solidIcons[business.icon] || faBuilding}
-                            className="text-2xl mb-2"
-                          />
+                            className="text-2xl mb-2 flex"
+                          /> */}
                           <span className="block font-semibold">
                             {business.business_name}
                           </span>
@@ -332,14 +338,14 @@ const BusinessListing = () => {
                 </div>
               )}
               {activeTab === "categories" && (
-                <div>
+                <div className="mt-4">
                   <button
-                    className="mb-4 p-2 bg-orange-300 text-white rounded-md"
+                    className="mb-4 p-2 bg-orange-300 text-white rounded-md float-right"
                     onClick={handleAddCategoryClick}
                   >
                     Add Category
                   </button>
-                  <div className="flex">
+                  <div className="flex my-4">
                     <FontAwesomeIcon
                       icon={solidIcons.faLayerGroup}
                       className="text-xl text-center mb-2 mr-2"
@@ -351,16 +357,18 @@ const BusinessListing = () => {
                   {categoriesFetched.map((fetchedCategory) => (
                     <div
                       key={fetchedCategory._id}
-                      className="p-4 border rounded-md mb-2"
+                      className="p-4 border rounded-xl mb-2 bg-white shadow-md"
                     >
-                      <FontAwesomeIcon
-                        icon={solidIcons[fetchedCategory.icon] || faBuilding}
-                        className="text-2xl mb-2"
-                      />
-                      <span className="block font-semibold">
-                        {fetchedCategory.name}
-                      </span>
-                      <span className="block text-gray-600">
+                      <div className="flex mb-3">
+                        <FontAwesomeIcon
+                          icon={solidIcons[fetchedCategory.icon] || faBuilding}
+                          className="text-2xl mb-2 mr-3"
+                        />
+                        <span className="block font-semibold ">
+                          {fetchedCategory.name}
+                        </span>
+                      </div>
+                      <span className="block text-gray-600 ml-5">
                         {fetchedCategory.description}
                       </span>
                     </div>
@@ -381,7 +389,7 @@ const BusinessListing = () => {
             >
               <FontAwesomeIcon icon="fa-solid fa-xmark" />
             </button>
-            <h2 className="text-xl font-semibold mb-4">Add Category</h2>
+            <h2 className="text-xl font-semibold mb-4 ">Add Category</h2>
             <form onSubmit={handleSubmit}>
               <label htmlFor="newCategoryName" className="block mb-2">
                 Category Name:
@@ -439,7 +447,7 @@ const BusinessListing = () => {
               <div className="flex justify-end space-x-2">
                 <button
                   type="submit"
-                  className="p-2 bg-gray-800 text-white rounded-md"
+                  className="p-2 bg-orange-400 text-white rounded-md"
                 >
                   Add
                 </button>
