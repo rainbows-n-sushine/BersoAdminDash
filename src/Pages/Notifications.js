@@ -17,17 +17,17 @@ import api from "../util/Util";
 
 import img from "../images/logo-removebg.png";
 import NavBar from "../components/NavBar";
+import Menu from "../components/Menu";
 
 const Notifications = () => {
   const [businesses,setBusinesses]=useState([])
   const [reports,setReports]=useState([])
-  const [notifications,setNotifications]=useState([])
   const [notificationList, setNotificationList] = useState([]);
   useEffect(()=>{
     getNotifications();
  
 
-  },[setNotificationList])
+  },[])
   
 
  
@@ -45,7 +45,9 @@ const Notifications = () => {
       if(res.data.success){
         console.log('these r the new reports fetched: ',res.data.reports)
         setReports(res.data.reports)
-        setNotifications((prevArray)=>[...prevArray,res.data.reports])
+        console.log('im in fetchnew reports and ths r businesess  ',businesses)
+        setNotificationList([...businesses,...res.data.reports])
+        
       }
     })
     .catch((error)=>{
@@ -57,9 +59,9 @@ const Notifications = () => {
   }
 
 
-  useEffect(()=>{
-    mapNotifications();
-  },[reports])
+  // useEffect(()=>{
+  //   mapNotifications();
+  // },[reports])
 
 
 
@@ -73,7 +75,7 @@ const Notifications = () => {
       if(res.data.success){
         console.log('these r the new businesses fetched: ',res.data.businesses)
         setBusinesses(res.data.businesses)
-        setNotifications((prevArray)=>[...prevArray,res.data.businesses])
+     
         
       }
     })
@@ -85,23 +87,23 @@ const Notifications = () => {
 
   }
 
-  const mapNotifications=()=>{
+  // const mapNotifications=()=>{
     
 
-    console.log('im in map notifications')
-    console.log(reports,businesses)
-    let fetchedNotifications=[]
-    console.log('these are notifications', notifications)
-    notifications.map((notifs)=>{
-      console.log("this is noti")
-      notifs.map((notif)=>{
-        fetchedNotifications.push(notif)        
-      })      
-    })
-    console.log("these r fetched notifications ",fetchedNotifications)
-    // setNotifications(fetchedNotifications)
-    setNotificationList(fetchedNotifications)
-  }
+  //   console.log('im in map notifications')
+  //   console.log(reports,businesses)
+  //   let fetchedNotifications=[]
+  //   console.log('these are notifications', notifications)
+  //   notifications.map((notifs)=>{
+  //     console.log("this is noti")
+  //     notifs.map((notif)=>{
+  //       fetchedNotifications.push(notif)        
+  //     })      
+  //   })
+  //   console.log("these r fetched notifications ",fetchedNotifications)
+  //   // setNotifications(fetchedNotifications)
+  //   setNotificationList(fetchedNotifications)
+  // }
   
 
 
@@ -141,6 +143,11 @@ const Notifications = () => {
       await api.put('report/update-report-status',{reportId,status})
       .then((res)=>{
         console.log(res.data.message)
+        if(res.data.success){
+          setNotificationList(updatedNotifications);
+          window.location.reload();
+
+        }
       })
       .catch((error)=>{
         if(error){
@@ -156,6 +163,10 @@ const Notifications = () => {
       await api.put('business/update-business-status',{businessId,status})
       .then((res)=>{
         console.log(res.data.message)
+        if(res.data.success){
+          setNotificationList(updatedNotifications);
+          window.location.reload();
+        }
       })
       .catch((error)=>{
         if(error){
@@ -164,76 +175,58 @@ const Notifications = () => {
       })
     }
 
-    setNotificationList(updatedNotifications);
+    
+    
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async(notif) => {
     const updatedNotifications = notificationList.filter(
-      (notification) => notification.id !== id
+      (notification) => notification._id !== notif._id
     );
     setNotificationList(updatedNotifications);
+
+    if(notif.notif_type==="New Report"){
+      const reportId=notif._id
+      await api.delete('report/delete',{reportId})
+      .then((res)=>{
+        console.log(res.data.message)
+        if(res.data.success){
+          setNotificationList(updatedNotifications);
+          window.location.reload();
+
+        }
+      })
+      .catch((error)=>{
+        if(error){
+          console.log(error.message)
+        }
+      })
+      
+    }
+    else if (notif.notif_type==="New Business"){
+      const businessId=notif._id
+
+      await api.delete('business/delete',{businessId})
+      .then((res)=>{
+        console.log(res.data.message)
+        if(res.data.success){
+          setNotificationList(updatedNotifications);
+          window.location.reload();
+        }
+      })
+      .catch((error)=>{
+        if(error){
+          console.log(error.message)
+        }
+      })
+    }
   };
 
   return (
     <div className="notification-container flex flex-col h-screen">
      <NavBar/>
       <div className="dashboard-content flex flex-1">
-        <div className="sidebar w-72 p-4 shadow">
-          <div className="side-menu">
-            {" "}
-            <h2 className="text-2xl font-bold my-5">Menu</h2>
-            <ul>
-              <li className="mb-4">
-                <Link to="/" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faHome} className="text-xl mr-3" />
-                  Home
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  to="/UserManagement"
-                  className="flex items-center text-xl"
-                >
-                  <FontAwesomeIcon icon={faUsers} className="text-xl mr-3" />
-                  User
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  to="/BusinessListing"
-                  className="flex items-center text-xl"
-                >
-                  <FontAwesomeIcon
-                    icon={faLayerGroup}
-                    className="text-xl mr-3"
-                  />
-                  Categories
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  to="/ProblemReports"
-                  className="flex items-center text-xl"
-                >
-                  <FontAwesomeIcon icon={faChartBar} className="text-xl mr-3" />{" "}
-                  Problem Reports
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link to="/Notifications" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
-                  Notifications
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link to="/settings" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />{" "}
-                  Settings
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <Menu/>
         <div className="dashboard-content-right flex flex-col flex-1 p-4 bg-orange-50">
           <div className="flex m-4 ml-5 items-center">
             <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
@@ -241,7 +234,12 @@ const Notifications = () => {
           </div>
           <div className="notifications-list mt-4">
             {notificationList.map((notification) => (
-              <Link
+           
+                <div
+                  key={notification._id && notification.notif_type}
+                  className="notification-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between"
+                >
+                     <Link
                 to={{
                   pathname: `/notifications/${notification._id}`,
                   state: { notification },
@@ -249,10 +247,6 @@ const Notifications = () => {
 
                 // className="btn-view-detail p-2 bg-blue-500 text-white rounded"
               >
-                <div
-                  key={notification._id}
-                  className="notification-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between"
-                >
                   <div className="flex-col">
                     <h2 className="font-bold text-xl text-orange-500">
                       {notification.notif_type}
@@ -267,9 +261,11 @@ const Notifications = () => {
                       {notification.status === "read" ? "Read" : "Unread"}
                     </p>
                   </div>
-                  <div className="actions mt-2 flex">
-                    {notification.status === "unread" ||
-                      ("pending" && (
+                  </Link>
+                 
+                    
+                    {notification.status === "unread" || "pending" && (
+                        <div className="actions mt-2 flex">
                         <button
                           className="btn-mark-read mr-2 p-2 bg-green-500 text-white rounded"
                           onClick={() => handleMarkAsRead(notification)}
@@ -277,17 +273,17 @@ const Notifications = () => {
                           <FontAwesomeIcon icon={faCheck} className="mr-1" />{" "}
                           Mark as Read
                         </button>
-                      ))}
-
-                    <button
-                      className="btn-delete p-2 bg-red-500 text-white rounded"
-                      onClick={() => handleDelete(notification)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
-                    </button>
-                  </div>
-                </div>
-              </Link>
+                         <button
+                         className="btn-delete p-2 bg-red-500 text-white rounded"
+                         onClick={() => handleDelete(notification)}
+                       >
+                         <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
+                       </button>
+                     </div>
+                  
+                      )}
+                       </div>                  
+             
             ))}
             {notificationList.length === 0 && (
               <p className="text-center mt-4">No notifications found.</p>

@@ -11,7 +11,7 @@ const AuthProvider=({children})=>{
 
  
 const [isLoading, setIsLoading]=useState(false);
-const [adminToken,setAdminToken]=useState(null)
+const [adminToken,setAdminToken]=useState('')
 const [adminId,setAdminId]=useState('')
 const [adminLoggedIn,setAdminLoggedIn]=useState(false)
 
@@ -67,11 +67,17 @@ const isLoggedIn=async function(){
         setAdminToken(_adminToken)
         setAdminId(_adminId) 
         setAdminLoggedIn(true)
+        setIsLoading(false)
+        return true
    
+    }else{
+        setAdminLoggedIn(false)
+        setIsLoading(false)
+        return false
     }
 
 
-    setIsLoading(false)
+    
         
     } catch (error) {
         if(error){
@@ -89,7 +95,7 @@ const AdminLogout=async()=>{
      localStorage.removeItem('adminId')
      setAdminLoggedIn(false)
     setIsLoading(false);
-    
+   
     // setRefreshing(false)
 
 }

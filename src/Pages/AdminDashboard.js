@@ -17,9 +17,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 // import "./UserManagement";
 import CanvasJSReact from "@canvasjs/react-charts";
-import { Link } from "react-router-dom";
+
 import img from "../images/logo-removebg.png";
 import NavBar from "../components/NavBar";
+import api from "../util/Util";
+import Menu from "../components/Menu";
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const AdminDashboard = () => {
@@ -30,38 +32,108 @@ const AdminDashboard = () => {
  const [claimedListingsCount, setClaimedListingsCount] = useState(0);
  const [monthlyUsersData, setMonthlyUsersData] = useState([]);
 
- useEffect(() => {
-   async function fetchData() {
-     try {
-       const categoriesRes = await fetch("/category/fetchAll");
-       const categoriesData = await categoriesRes.json();
+//  useEffect(() => {
+//    async function fetchData() {
+//      try {
+//        const categoriesRes = await fetch("/category/fetchAll");
+//        const categoriesData = await categoriesRes.json();
 
-       const listingsRes = await fetch("/business/fetch-all");
-       const listingsData = await listingsRes.json();
+//        const listingsRes = await fetch("/business/fetch-all");
+//        const listingsData = await listingsRes.json();
 
-      //  const claimedListingsRes = await fetch("/business/fetch-claimed"); // Assuming this endpoint exists
-      //  const claimedListingsData = await claimedListingsRes.json();
+//       //  const claimedListingsRes = await fetch("/business/fetch-claimed"); // Assuming this endpoint exists
+//       //  const claimedListingsData = await claimedListingsRes.json();
 
-       const monthlyUsersRes = await fetch("/api/users/monthly"); // Assuming this endpoint exists
-       const monthlyUsersData = await monthlyUsersRes.json();
+//        const monthlyUsersRes = await fetch("/api/users/monthly"); // Assuming this endpoint exists
+//        const monthlyUsersData = await monthlyUsersRes.json();
 
-       setCategoriesCount(categoriesData.categories.length);
-       setListingsCount(listingsData.businesses.length);
-      //  setClaimedListingsCount(claimedListingsData.claimed.length); // Assuming the response contains a `claimed` array
-       setMonthlyUsersData(monthlyUsersData.dataPoints); // Adjust according to actual data structure
-     } catch (error) {
-       console.error("Error fetching data", error);
-     }
+//        setCategoriesCount(categoriesData.categories.length);
+//        setListingsCount(listingsData.businesses.length);
+//       //  setClaimedListingsCount(claimedListingsData.claimed.length); // Assuming the response contains a `claimed` array
+//        setMonthlyUsersData(monthlyUsersData.dataPoints); // Adjust according to actual data structure
+//      } catch (error) {
+//        console.error("Error fetching data", error);
+//      }
+//    }
+
+//    fetchData();
+//  }, []);
+
+//  useEffect(() => {
+//    if (chartRef.current) {
+//      chartRef.current.render();
+//    }
+//  }, [monthlyUsersData]);
+useEffect(()=>{
+  fetchCategoriesCount()
+  fetchBusinessesCount()
+  fetchMonthlyUsers()
+},[])
+
+
+const fetchCategoriesCount=async()=>{
+  await api.get('category/fetchAll')
+  .then((res)=>{
+    const data=res.data
+    if(data.success){
+      const categories=data.categories.length
+      setCategoriesCount(categories)
+    }else{
+      console.log(data.message)
+    }
+
+    
+  })
+  .catch((error)=>{
+   if(error){
+    console.log('this is the error in fetch categories in admin dashbooard: ',error.message)
    }
 
-   fetchData();
- }, []);
+  })
+}
 
- useEffect(() => {
-   if (chartRef.current) {
-     chartRef.current.render();
+const fetchBusinessesCount=async()=>{
+  await api.get('business/fetch-all')
+  .then((res)=>{
+    const data=res.data
+    if(data.success){
+      const businesses=data.businesses.length
+      setListingsCount(businesses)
+    }else{
+      console.log(data.message)
+    }
+
+    
+  })
+  .catch((error)=>{
+   if(error){
+    console.log('this is the error in fetch businesses in admin dashbooard: ',error.message)
    }
- }, [monthlyUsersData]);
+
+  })
+}
+
+
+const fetchMonthlyUsers=async()=>{
+  await api.get('user/fetch-monthly-users')
+  .then((res)=>{
+    const data=res.data
+    if(data.success){
+      const dataPoints=data.dataPoints
+      setMonthlyUsersData(dataPoints)
+    }else{
+      console.log(data.message)
+    }
+
+    
+  })
+  .catch((error)=>{
+   if(error){
+    console.log('this is the error in fetch businesses in admin dashbooard: ',error.message)
+   }
+
+  })
+}
 
  const options = {
    animationEnabled: true,
@@ -80,7 +152,7 @@ const AdminDashboard = () => {
        yValueFormatString: "#,###",
        xValueFormatString: "MMMM",
        type: "spline",
-       dataPoints: monthlyUsersData,
+       dataPoints: [{x:6,y:7},{x:6,y:7}],
      },
    ],
  };
@@ -89,63 +161,7 @@ const AdminDashboard = () => {
     <div className="admin-dashboard flex flex-col h-screen">
      <NavBar/>
       <div className="dashboard-content flex flex-1">
-        <div className="sidebar w-72 p-4 shadow">
-          <div className="side-menu">
-            {" "}
-            <h2 className="text-2xl font-bold my-5">Menu</h2>
-            <ul>
-              <li className="mb-4">
-                <Link to="/" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faHome} className="text-xl mr-3" />
-                  {/* <FontAwesomeIcon icon="fa-solid fa-house" /> */}
-                  Home
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  to="/UserManagement"
-                  className="flex items-center text-xl"
-                >
-                  <FontAwesomeIcon icon={faUsers} className="text-xl mr-3" />
-                  User
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  to="/BusinessListing"
-                  className="flex items-center text-xl"
-                >
-                  <FontAwesomeIcon
-                    icon={faLayerGroup}
-                    className="text-xl mr-3"
-                  />
-                  Catagories
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  to="/ProblemReports"
-                  className="flex items-center text-xl"
-                >
-                  <FontAwesomeIcon icon={faChartBar} className="text-xl mr-3" />{" "}
-                  Problem Reports
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link to="/Notifications" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
-                  Notifications
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link to="/settings" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />{" "}
-                  Settings
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <Menu/>
         <div className="dashboard-content-right flex flex-col flex-1 p-4 bg-orange-50">
           <div className=" flex m-4  ml-5 items-center">
             <FontAwesomeIcon icon={faHome} className="text-xl mr-3 " />

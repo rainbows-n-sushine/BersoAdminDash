@@ -3,10 +3,17 @@ import { Navigate } from "react-router-dom";
 import {AuthContext}  from "./context/AuthContext";
 
 const PrivateRoute = ({ element }) => {
+ const adminToken=localStorage.getItem('adminToken')
+  console.log('im in private route and this is the value of isLogged in: ',adminToken)
   
-  const { adminLoggedIn } = useContext(AuthContext);
-  console.log('im in private route and this is the value of isLogged in: ',adminLoggedIn)
-  return adminLoggedIn ? element : <Navigate to="/login" />;
+  if(adminToken){
+
+    return element; 
+
+  }else{
+    return <Navigate to="/login" />;
+  }
+  
 };
 
 export default PrivateRoute;

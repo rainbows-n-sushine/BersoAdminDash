@@ -11,8 +11,10 @@ import {
 import { Button } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 const NavBar=()=>{
+  const navigate=useNavigate()
     const {AdminLogout}=useContext(AuthContext)
 
     return(
@@ -36,7 +38,10 @@ const NavBar=()=>{
             <FontAwesomeIcon icon={faBell} className="text-lg " />
           </Link>{" "}
           <FontAwesomeIcon icon={faUser} className="text-lg " />
-          <Button onClick={AdminLogout}><FontAwesomeIcon icon={faSignOutAlt} className="text-lg" /></Button>
+          <Button onClick={()=>{
+            AdminLogout()
+            navigate('/login')
+          }}><FontAwesomeIcon icon={faSignOutAlt} className="text-lg" /></Button>
         </div>
       </div>
     )

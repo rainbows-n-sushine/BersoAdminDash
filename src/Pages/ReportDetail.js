@@ -20,6 +20,7 @@ import {
 
 import img from "../images/logo-removebg.png";
 import NavBar from "../components/NavBar";
+import Menu from "../components/Menu";
 const ReportDetail = () => {
   const { id } = useParams();
 
@@ -78,59 +79,7 @@ const ReportDetail = () => {
     <div className="report-container flex flex-col h-screen">
     <NavBar/>
       <div className="dashboard-content flex flex-1">
-        <div className="sidebar w-72 p-4 shadow">
-          <div className="side-menu">
-            <h2 className="text-2xl font-bold my-5">Menu</h2>
-            <ul>
-              <li className="mb-4">
-                <Link to="/" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faHome} className="text-xl mr-3" />
-                  {/* <FontAwesomeIcon icon="fa-solid fa-house" /> */}
-                  Home
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  to="/UserManagement"
-                  className="flex items-center text-xl"
-                >
-                  <FontAwesomeIcon icon={faUsers} className="text-xl mr-3" />
-                  User
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  to="/BusinessListing"
-                  className="flex items-center text-xl"
-                >
-                  <FontAwesomeIcon
-                    icon={faLayerGroup}
-                    className="text-xl mr-3"
-                  />
-                  Catagories
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link to="/ReportDetail" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faChartBar} className="text-xl mr-3" />{" "}
-                  Problem Reports
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link to="/Notifications" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faBell} className="text-xl mr-3" />
-                  Notifications
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link to="/settings" className="flex items-center text-xl">
-                  <FontAwesomeIcon icon={faCog} className="text-xl mr-3" />{" "}
-                  Settings
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <Menu/>
         <div className="dashboard-content-right flex flex-col flex-1 p-4  bg-orange-50">
           <div className=" flex justify-between items-center p-4 bg-white text-black shadow">
             <Link to="/ProblemReports" className="flex items-center">

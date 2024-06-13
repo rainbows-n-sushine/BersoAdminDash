@@ -20,7 +20,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route
-            path="/"
+            path="/Dashboard"
             element={<PrivateRoute element={<AdminDashboard />} />}
           />
           <Route

@@ -14,7 +14,7 @@ const LoginPage = () => {
     // Perform authentication here
     if(credential&&password){
       AdminLogin(credential,password);
-    navigate("/");
+    navigate("/Dashboard");
     }else{
       alert('provide the proper credentials')
     }
