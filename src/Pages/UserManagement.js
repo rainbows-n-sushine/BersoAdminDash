@@ -17,6 +17,7 @@ import {
   faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import api from "../util/Util";
+import NavBar from "../components/NavBar";
 import img from "../images/logo-removebg.png";
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -57,30 +58,7 @@ const UserManagement = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="top-bar flex justify-between items-center p-4 bg-white text-black shadow">
-        <div className=" flex items-center ">
-          <img src={img} alt="Logo" className="w-12 h-12 mr-2" />
-          <h1 className="text-xl font-bold items-center text-orange-600">
-            Berso Admin
-          </h1>
-        </div>{" "}
-        <div className="flex items-center">
-          <FontAwesomeIcon icon={faSearch} className="text-lg mr-2" />
-          <input
-            type="text"
-            placeholder="Search"
-            className="py-1 px-2 bg-gray-200 rounded w-96"
-            onChange={handleSearch}
-          />
-        </div>
-        <div className="top-bar-icons flex items-center justify-between w-60">
-          <Link to="/Notifications">
-            <FontAwesomeIcon icon={faBell} className="text-lg " />
-          </Link>{" "}
-          <FontAwesomeIcon icon={faUser} className="text-lg " />
-          <FontAwesomeIcon icon={faSignOutAlt} className="text-lg" />
-        </div>
-      </div>
+     <NavBar/>
       <div className="dashboard-content flex flex-1">
         <div className="sidebar w-72 p-4 shadow">
           <div className="side-menu">

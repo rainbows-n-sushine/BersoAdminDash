@@ -4,6 +4,7 @@ import './UserManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faSearch, faBell, faUser, faSignOutAlt ,  faBuilding, faStore, faHotel, faUtensils, faCog, faHome, faGift, faBriefcase, faCar, faShoppingBag} from '@fortawesome/free-solid-svg-icons';
 import api from '../util/Util';
+import NavBar from '../components/NavBar';
 
 // Sample data for businesses and categories
 const businesses = [
@@ -43,18 +44,7 @@ class BusinessListing extends Component {
 
     return (
         <div>
-        <div className='user-management'>
-        <div className="top-bar">
-        <input type="text" placeholder="Search" />
-        <FontAwesomeIcon icon={faSearch} className="icon" />
-        <div className="top-bar2">
-          
-          <FontAwesomeIcon icon={faBell} className="icon" />
-          <FontAwesomeIcon icon={faUser} className="icon" />
-          <FontAwesomeIcon icon={faSignOutAlt } className="icon" />
-        </div>
-      </div>
-      </div>
+        <NavBar/>
       <div className="business-listings">
         <div className="categories">
       <div className='user-management'>
