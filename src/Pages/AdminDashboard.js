@@ -106,7 +106,7 @@ const AdminDashboard = () => {
             <FontAwesomeIcon icon={faBell} className="text-lg " />
           </Link>
           <FontAwesomeIcon icon={faUser} className="text-lg " />
-          <FontAwesomeIcon icon={faSignOutAlt} className="text-lg" />
+              <FontAwesomeIcon icon={faSignOutAlt} className="text-lg" />
         </div>
       </div>
       <div className="dashboard-content flex flex-1">

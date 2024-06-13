@@ -10,7 +10,7 @@ import Notifications from "./Pages/Notifications";
 import Settings from "./Pages/Settings";
 import NotificationDetail from "./Pages/NotificationDetail";
 import Login from "./Pages/Login";
-import { AuthProvider } from "./AuthContext";
+import AuthProvider  from "./context/AuthContext";
 import PrivateRoute from "./PrivateRoute";
 
 function App() {

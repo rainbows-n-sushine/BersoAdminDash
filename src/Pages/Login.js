@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../AuthContext";
+import {AuthContext} from "../context/AuthContext";
 import loginImage from "../images/logo-removebg.png"; // Import your image here
 
 const LoginPage = () => {
@@ -13,8 +13,8 @@ const LoginPage = () => {
     e.preventDefault();
     // Perform authentication here
     if(credential&&password){
-      AdminLogin();
-    navigate("AdminDashboard");
+      AdminLogin(credential,password);
+    navigate("/");
     }else{
       alert('provide the proper credentials')
     }

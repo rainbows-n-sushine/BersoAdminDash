@@ -1,5 +1,5 @@
 import React,{createContext,useState, useEffect} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import api from '../util/Util';
 
 
@@ -13,20 +13,14 @@ const AuthProvider=({children})=>{
 const [isLoading, setIsLoading]=useState(false);
 const [adminToken,setAdminToken]=useState(null)
 const [adminId,setAdminId]=useState('')
-
-
-
-useEffect(()=>{
-    isLoggedIn();
-},[AdminLogin,AdminLogout]);
-
+const [adminLoggedIn,setAdminLoggedIn]=useState(false)
 
 
 
 const AdminLogin=async(credential,password)=>{
 
 
-await api.post('admin/signin',{credential,password})
+    await api.post('admin/signin',{credential,password})
 .then((res)=>{
     
     setIsLoading(true)
@@ -37,14 +31,16 @@ const token=res.data.adminToken
 
     console.log('im in auth context of the admin panel and this is the value ofadmnin._id',_adminId)
     console.log("this is the adminId "+ _adminId)
-    AsyncStorage.setItem('adminToken',token)
-    AsyncStorage.setItem('adminId',_adminId)
+    localStorage.setItem('adminToken',token)
+    localStorage.setItem('adminId',_adminId)
     setAdminId(_adminId)
     setAdminToken(token);
+    setAdminLoggedIn(true)
     console.log("this is the token in login: "+token )
+    
 
     }else{
-        Alert.alert(res.data.message)
+        alert(res.data.message)
     }
     setIsLoading(false);
 }).catch((error)=>{
@@ -59,8 +55,8 @@ const token=res.data.adminToken
 const isLoggedIn=async function(){
     try {
     setIsLoading(true)  
-    const _adminToken=await AsyncStorage.getItem('adminToken')
-    const _adminId=await AsyncStorage.getItem('adminId')
+    const _adminToken= localStorage.getItem('adminToken')
+    const _adminId= localStorage.getItem('adminId')
    
 
     console.log('adminToken : ',_adminToken)
@@ -70,6 +66,7 @@ const isLoggedIn=async function(){
     if(_adminToken){
         setAdminToken(_adminToken)
         setAdminId(_adminId) 
+        setAdminLoggedIn(true)
    
     }
 
@@ -79,17 +76,32 @@ const isLoggedIn=async function(){
     } catch (error) {
         if(error){
             console.log('the error in is logged in auth conttxet:',error.message)
-        }
-        
+        }       
     }
-    
+}
 
+
+
+const AdminLogout=async()=>{
+    // setRefreshing(true)
+    setIsLoading(true);
+     localStorage.removeItem('adminToken')
+     localStorage.removeItem('adminId')
+     setAdminLoggedIn(false)
+    setIsLoading(false);
+    
+    // setRefreshing(false)
 
 }
 
+useEffect(()=>{
+    isLoggedIn();
+},[AdminLogin,AdminLogout]);
+
+
 return(
 
-    <AuthContext.Provider value={{AdminLogin,AdminLogout,isLoading,adminToken,adminId,isLoggedIn}}>
+    <AuthContext.Provider value={{AdminLogin,AdminLogout,isLoading,adminToken,adminId,isLoggedIn,adminLoggedIn}}>
         {children}
     </AuthContext.Provider>
     
