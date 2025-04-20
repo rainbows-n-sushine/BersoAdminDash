@@ -24,9 +24,9 @@ import img from "../images/logo-removebg.png";
 import NavBar from "../components/NavBar";
 import Menu from "../components/Menu";
 
-const NotificationDetail = () => {
+const NotificationDetail = ({route}) => {
    // Assuming the notification ID is passed via URL params
-  
+  // const {notification}=route.useParams()
   const [isReport,setIsReport]=useState(false)
   const [businessId,setBusinessId]=useState('')
   const [reportId,setReportId]=useState('')
@@ -75,24 +75,26 @@ const NotificationDetail = () => {
   };
 
   const getNotifDetails=async()=>{
-    setNotificationDetail(notification)
+    // setNotificationDetail(notification)
 
     if (!state || !state.notification) {
       console.log('i am waiting')
     } else {
       setNotification(state.notification);
-    if(notification){
-      console.log('this is notification ',notification)
+      setNotificationDetail(state.notification)
+    if(state.notification){
+      console.log('this is notification ',state.notification.notif_type)
       
 
-    if(notification.notif_type==="New Report"){
+    if(state.notification.notif_type==="New Report"){
       setIsReport(true)
-      setReportId(notification._id)
-      setUserId(notification.user) 
+      setReportId(state.notification._id)
+      setUserId(state.notification.user) 
 
     }else{
-      setBusinessId(notification._id)
-      setBusinessOwnerId(notification.business_owner)
+      setIsReport(false)
+      setBusinessId(state.notification._id)
+      setBusinessOwnerId(state.notification.business_owner)
        
 
     }
@@ -100,7 +102,7 @@ const NotificationDetail = () => {
   }}}
 
   useEffect(() => {
-    setNotificationDetail(notification);
+
     getNotifDetails()
  
   }, [notification]);

@@ -59,11 +59,11 @@ const AdminDashboard = () => {
 //    fetchData();
 //  }, []);
 
-//  useEffect(() => {
-//    if (chartRef.current) {
-//      chartRef.current.render();
-//    }
-//  }, [monthlyUsersData]);
+ useEffect(() => {
+   if (chartRef.current) {
+     chartRef.current.render();
+   }
+ }, [monthlyUsersData]);
 useEffect(()=>{
   fetchCategoriesCount()
   fetchBusinessesCount()
@@ -121,6 +121,7 @@ const fetchMonthlyUsers=async()=>{
     if(data.success){
       const dataPoints=data.dataPoints
       setMonthlyUsersData(dataPoints)
+      console.log("this is the monthly users data: " ,dataPoints)
     }else{
       console.log(data.message)
     }
@@ -152,7 +153,7 @@ const fetchMonthlyUsers=async()=>{
        yValueFormatString: "#,###",
        xValueFormatString: "MMMM",
        type: "spline",
-       dataPoints: [{x:6,y:7},{x:6,y:7}],
+       dataPoints: monthlyUsersData,
      },
    ],
  };

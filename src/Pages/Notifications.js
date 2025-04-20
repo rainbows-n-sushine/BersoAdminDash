@@ -25,40 +25,23 @@ const Notifications = () => {
   const [notificationList, setNotificationList] = useState([]);
   useEffect(()=>{
     getNotifications();
+    setNotificationList([...businesses,...reports])
+    
  
 
-  },[])
+  },[reports,businesses])
   
 
  
   const getNotifications=async()=>{
     await fetchNewBusinesses();
     await fetchNewReports();
+    
 
   }
   
 
-  const fetchNewReports=async()=>{
-    await api.get('report/fetch-new-reports')
-    .then((res)=>{
-      console.log(res.data.message)
-      if(res.data.success){
-        console.log('these r the new reports fetched: ',res.data.reports)
-        setReports(res.data.reports)
-        console.log('im in fetchnew reports and ths r businesess  ',businesses)
-        setNotificationList([...businesses,...res.data.reports])
-        
-      }
-    })
-    .catch((error)=>{
-      if(error){
-        console.log('error in fetch new reports: ',error.message)
-      }
-    })
-
-  }
-
-
+ 
   // useEffect(()=>{
   //   mapNotifications();
   // },[reports])
@@ -86,6 +69,28 @@ const Notifications = () => {
     })
 
   }
+
+  const fetchNewReports=async()=>{
+    await api.get('report/fetch-new-reports')
+    .then((res)=>{
+      console.log(res.data.message)
+      if(res.data.success){
+        console.log('these r the new reports fetched: ',res.data.reports)
+        setReports(res.data.reports)
+        console.log('im in fetchnew reports and ths r businesess  ',businesses)
+
+        
+      }
+    })
+    .catch((error)=>{
+      if(error){
+        console.log('error in fetch new reports: ',error.message)
+      }
+    })
+
+  }
+
+
 
   // const mapNotifications=()=>{
     
@@ -236,7 +241,7 @@ const Notifications = () => {
             {notificationList.map((notification) => (
            
                 <div
-                  key={notification._id && notification.notif_type}
+                  key={notification._id & notification.notif_type}
                   className="notification-item p-4 border-b bg-white rounded-lg shadow mb-4 flex justify-between"
                 >
                      <Link
