@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import { Navigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -7,6 +8,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = () => {
     setIsAuthenticated(true);
+     return <Navigate to="/Dashboard" />;
   };
 
   const logout = () => {

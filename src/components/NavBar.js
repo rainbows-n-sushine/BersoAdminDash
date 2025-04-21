@@ -40,7 +40,7 @@ const NavBar=()=>{
           <FontAwesomeIcon icon={faUser} className="text-lg " />
           <Button onClick={()=>{
             AdminLogout()
-            navigate('/login')
+            navigate('/')
           }}><FontAwesomeIcon icon={faSignOutAlt} className="text-lg" /></Button>
         </div>
       </div>
