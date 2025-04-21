@@ -72,12 +72,14 @@ useEffect(()=>{
 
 
 const fetchCategoriesCount=async()=>{
+  console.log("im in categories count")
   await api.get('category/fetchAll')
   .then((res)=>{
     const data=res.data
     if(data.success){
       const categories=data.categories.length
       setCategoriesCount(categories)
+      console.log("this is categories count: ",categories)
     }else{
       console.log(data.message)
     }
