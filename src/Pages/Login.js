@@ -23,18 +23,20 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-200 items-center justify-center">
-      <div className="bg-white shadow-lg rounded-lg overflow-hidden flex w-3/4 max-w-4xl">
-        {/* Left section with image and welcome text */}
-        <div className="w-1/2 bg-white p-8 flex flex-col items-center justify-center">
-          <img src={loginImage} alt="Login" className="w-3/4 mb-4" />
-          {/* <h1 className="text-3xl font-bold text-center text-orange-600">
-            Welcome to Admin Dashboard
-          </h1> */}
+    <div className="flex min-h-screen bg-gray-200  items-center justify-center">
+      {/* Left section with image and welcome text */}
+        <div className="w-1/2 h-[340px] border-rounded-[20px] bg-white p-8 flex flex-col rounded-lg shadow-lg items-center items-center justify-center">
+          <h1 className="lg:text-[45px] md:text-[30px] text-[25px] font-bold text-center text-orange-400 mt-[20px] mb-[30px] ">
+            Welcome🌻
+          </h1>
+          <img src={loginImage} alt="Login" className="w-[50dvw] mb-4" />
+          
         </div>
+      <div className="flex bg-white shadow-lg rounded-lg overflow-hidden flex w-3/4 max-w-4xl">
+       
 
         {/* Right section with login form */}
-        <div className="w-1/2 p-8 bg-orange-50">
+        <div className="w-[80dvw] p-8 bg-orange-50">
           <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
           <form onSubmit={handleLogin}>
             <div className="mb-4">
