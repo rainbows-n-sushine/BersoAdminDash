@@ -9,12 +9,13 @@ const LoginPage = () => {
   const { AdminLogin } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin =async(e) => {
     e.preventDefault();
     // Perform authentication here
     if(credential&&password){
-      AdminLogin(credential,password);
-    navigate("/Dashboard");
+       AdminLogin(credential,password);
+       navigate('/Dashboard')
+
     }else{
       alert('provide the proper credentials')
     }
