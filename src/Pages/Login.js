@@ -13,12 +13,16 @@ const LoginPage = () => {
     e.preventDefault();
     // Perform authentication here
     if(credential&&password){
-       AdminLogin(credential,password);
-       navigate('/Dashboard')
+       const loginSuccess = await AdminLogin(credential, password); 
 
-    }else{
-      alert('provide the proper credentials')
+    if (loginSuccess) {
+      navigate("/Dashboard");
+    } else {
+      alert("Login failed. Check credentials.");
     }
+  } else {
+    alert("Provide the proper credentials.");
+  }
     
   };
 

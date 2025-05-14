@@ -19,39 +19,35 @@ const [adminLoggedIn,setAdminLoggedIn]=useState(false)
 
 
 
-const AdminLogin=async(credential,password)=>{
+const AdminLogin = async (credential, password) => {
+  try {
+    setIsLoading(true);
 
+    const res = await api.post("admin/signin", { credential, password });
 
-    await api.post('admin/signin',{credential,password})
-.then((res)=>{
-    
-    setIsLoading(true)
-    console.log(res.data)
-    if(res.data.success===true){
-const token=res.data.adminToken
-    const _adminId=res.data.adminId
+    if (res.data.success === true) {
+      const token = res.data.adminToken;
+      const _adminId = res.data.adminId;
 
-    console.log('im in auth context of the admin panel and this is the value ofadmnin._id',_adminId)
-    console.log("this is the adminId "+ _adminId)
-    localStorage.setItem('adminToken',token)
-    localStorage.setItem('adminId',_adminId)
-    setAdminId(_adminId)
-    setAdminToken(token);
-    setAdminLoggedIn(true)
-    console.log("this is the token in login: "+token )
-    
+      localStorage.setItem("adminToken", token);
+      localStorage.setItem("adminId", _adminId);
 
-    }else{
-        alert(res.data.message)
+      setAdminId(_adminId);
+      setAdminToken(token);
+      setAdminLoggedIn(true);
+      setIsLoading(false);
+      return true;
+    } else {
+      alert(res.data.message);
+      setIsLoading(false);
+      return false;
     }
+  } catch (error) {
+    console.error("Login error:", error.message);
     setIsLoading(false);
-}).catch((error)=>{
-
-    if(error){
-        console.log('error in login authContext: of the amin panel ',error.message)
-    }
-})
-}
+    return false;
+  }
+};
 
 
 const isLoggedIn=async function(){
